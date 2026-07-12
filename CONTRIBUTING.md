@@ -15,7 +15,13 @@ cp .env.example .env   # then set NEOHUB_TOKEN (and optionally NEOHUB_HOST)
 
 ```bash
 pytest
-python scripts/generate_openapi.py   # if you changed the command catalogue
+```
+
+If you change the OpenAPI command catalogue in `scripts/generate_openapi.py`,
+regenerate and commit the YAML locally (CI does not run the generator):
+
+```bash
+python scripts/generate_openapi.py
 ```
 
 ## Pull requests
@@ -23,7 +29,8 @@ python scripts/generate_openapi.py   # if you changed the command catalogue
 - Keep changes focused and describe *why* in the PR body.
 - Prefer small PRs over large mixed ones.
 - Do not commit secrets (`.env`, tokens, hub credentials).
-- The OpenAPI YAML is generated — edit `scripts/generate_openapi.py`, then regenerate.
+- OpenAPI: edit `scripts/generate_openapi.py`, run the generator, commit both
+  the script and `docs/openapi/neohub-api.openapi.yaml`.
 
 ## Reporting issues
 

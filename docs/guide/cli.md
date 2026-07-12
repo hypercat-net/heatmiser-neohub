@@ -12,10 +12,10 @@ pip install -e .
 ```
 
 Docker (multi-arch image
-[`hypercat/heatmiser-neohub`](https://hub.docker.com/r/hypercat/heatmiser-neohub)):
+[`hypercat42/heatmiser-neohub`](https://hub.docker.com/r/hypercat42/heatmiser-neohub)):
 
 ```bash
-docker run --rm hypercat/heatmiser-neohub --help
+docker run --rm hypercat42/heatmiser-neohub --help
 ```
 
 ## Configuration
@@ -69,8 +69,8 @@ UDP broadcast does not leave Docker’s default bridge network. On Linux, use ho
 networking for `discover` (and for auto-discover when the host is unset):
 
 ```bash
-docker run --rm --network host hypercat/heatmiser-neohub discover
-docker run --rm --env-file .env hypercat/heatmiser-neohub live-data
+docker run --rm --network host hypercat42/heatmiser-neohub discover
+docker run --rm --env-file .env hypercat42/heatmiser-neohub live-data
 ```
 
 On Docker Desktop (macOS/Windows), prefer setting `NEOHUB_HOST` explicitly.

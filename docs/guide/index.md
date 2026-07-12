@@ -42,6 +42,6 @@ needs the CLI or `NeoHubClient`.
 ## Links
 
 - [GitHub repository](https://github.com/hypercat-net/heatmiser-neohub)
-- [Docker Hub](https://hub.docker.com/r/hypercat/heatmiser-neohub)
+- [Docker Hub](https://hub.docker.com/r/hypercat42/heatmiser-neohub)
 - [neoHub product page](https://www.heatmiser.com/neohub-smart-control/)
 - [IMI Heatmiser Developer Portal](https://dev.heatmiser.com/)

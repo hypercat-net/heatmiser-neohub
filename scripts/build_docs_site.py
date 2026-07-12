@@ -241,7 +241,7 @@ def build(out: Path) -> None:
             raise SystemExit(f"Missing guide page: {src}")
         write_page(out, dest, title, render_markdown(src), depth=depth)
 
-    api_md = DOCS / "neohub-api-rev-3.02.md"
+    api_md = DOCS / "reference" / "neohub-api-rev-3.02.md"
     write_page(
         out,
         "api/neohub-api.html",

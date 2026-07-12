@@ -38,7 +38,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v6
         with:
-          images: hypercat/heatmiser-neohub
+          images: hypercat42/heatmiser-neohub
           tags: |
             type=raw,value=latest,enable={{is_default_branch}}
             type=sha,prefix=,format=short,enable={{is_default_branch}}

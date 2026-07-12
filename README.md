@@ -1,6 +1,6 @@
 # heatmiser-neohub
 
-[![CI](https://github.com/hypercat-net/heatmiser-neohub/actions/workflows/tests.yml/badge.svg)](https://github.com/hypercat-net/heatmiser-neohub/actions/workflows/tests.yml) [![Docs](https://github.com/hypercat-net/heatmiser-neohub/actions/workflows/docs.yml/badge.svg)](https://github.com/hypercat-net/heatmiser-neohub/actions/workflows/docs.yml) [![License](https://img.shields.io/github/license/hypercat-net/heatmiser-neohub)](https://github.com/hypercat-net/heatmiser-neohub/blob/main/LICENSE) [![Docker](https://img.shields.io/docker/v/hypercat/heatmiser-neohub?label=docker)](https://hub.docker.com/r/hypercat/heatmiser-neohub)
+[![CI](https://github.com/hypercat-net/heatmiser-neohub/actions/workflows/tests.yml/badge.svg)](https://github.com/hypercat-net/heatmiser-neohub/actions/workflows/tests.yml) [![Docs](https://github.com/hypercat-net/heatmiser-neohub/actions/workflows/docs.yml/badge.svg)](https://github.com/hypercat-net/heatmiser-neohub/actions/workflows/docs.yml) [![License](https://img.shields.io/github/license/hypercat-net/heatmiser-neohub)](https://github.com/hypercat-net/heatmiser-neohub/blob/main/LICENSE) [![Docker](https://img.shields.io/docker/v/hypercat42/heatmiser-neohub?label=docker)](https://hub.docker.com/r/hypercat42/heatmiser-neohub)
 
 Python client library and command-line interface for the IMI Heatmiser NeoHub API
 (WebSocket/WSS control interface on port 4243, plus UDP `hubseek` discovery on
@@ -8,7 +8,7 @@ port 19790).
 
 [![BuyMeACoffee](https://raw.githubusercontent.com/barcar/buymeacoffee-badges/main/bmc-donate-white.svg)](https://buymeacoffee.com/barcar)
 
-See `docs/neohub-api-rev-3.02.md` for the full protocol reference this
+See `docs/reference/neohub-api-rev-3.02.md` for the full protocol reference this
 library implements.
 
 ## Related links
@@ -28,7 +28,7 @@ Published docs (GitHub Pages):
 - [OpenAPI / Swagger](https://hypercat-net.github.io/heatmiser-neohub/swagger/) (secondary command catalogue)
 
 Source markdown lives under [`docs/guide/`](docs/guide/) (product docs) and
-[`docs/neohub-api-rev-3.02.md`](docs/neohub-api-rev-3.02.md) (protocol).
+[`docs/reference/neohub-api-rev-3.02.md`](docs/reference/neohub-api-rev-3.02.md) (protocol).
 
 Build the site locally:
 
@@ -56,16 +56,16 @@ pip install -e ".[dev]"
 ### Docker
 
 A slim multi-arch image (`linux/amd64`, `linux/arm64`) is published to Docker Hub as
-[`hypercat/heatmiser-neohub`](https://hub.docker.com/r/hypercat/heatmiser-neohub):
+[`hypercat42/heatmiser-neohub`](https://hub.docker.com/r/hypercat42/heatmiser-neohub):
 
 ```bash
 # Discovery uses UDP broadcast. Containers are isolated from the LAN by default,
 # so on Linux use host networking for `discover` (and for auto-discover when
 # NEOHUB_HOST is unset).
-docker run --rm --network host hypercat/heatmiser-neohub discover
+docker run --rm --network host hypercat42/heatmiser-neohub discover
 
-docker run --rm -e NEOHUB_HOST -e NEOHUB_TOKEN hypercat/heatmiser-neohub live-data
-# or: docker run --rm --env-file .env hypercat/heatmiser-neohub live-data
+docker run --rm -e NEOHUB_HOST -e NEOHUB_TOKEN hypercat42/heatmiser-neohub live-data
+# or: docker run --rm --env-file .env hypercat42/heatmiser-neohub live-data
 ```
 
 ## Configuration
@@ -92,7 +92,7 @@ neohub live-data
 # Or export / Docker --env-file
 export NEOHUB_HOST=192.168.0.19
 export NEOHUB_TOKEN=your-api-token
-docker run --rm --env-file .env hypercat/heatmiser-neohub live-data
+docker run --rm --env-file .env hypercat42/heatmiser-neohub live-data
 ```
 
 ## CLI usage
