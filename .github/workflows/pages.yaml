@@ -1,4 +1,4 @@
-name: Docs
+name: Pages
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
     paths:
       - "docs/**"
       - "scripts/build_docs_site.py"
-      - ".github/workflows/docs.yml"
+      - ".github/workflows/pages.yaml"
       - "README.md"
       - "src/**"
   workflow_dispatch:
