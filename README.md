@@ -19,16 +19,18 @@ library implements.
 
 ## Documentation
 
-- API guide: [`docs/neohub-api-rev-3.02.md`](docs/neohub-api-rev-3.02.md)
-- OpenAPI 3.1: [`docs/openapi/neohub-api.openapi.yaml`](docs/openapi/neohub-api.openapi.yaml) (see [`docs/openapi/README.md`](docs/openapi/README.md))
+Published docs (GitHub Pages):
+[https://hypercat-net.github.io/heatmiser-neohub/](https://hypercat-net.github.io/heatmiser-neohub/)
 
-Regenerate the OpenAPI YAML from the command catalogue:
+- [CLI guide](https://hypercat-net.github.io/heatmiser-neohub/cli.html)
+- [Python library guide](https://hypercat-net.github.io/heatmiser-neohub/library.html)
+- [NeoHub API protocol guide](https://hypercat-net.github.io/heatmiser-neohub/api/neohub-api.html) (reference)
+- [OpenAPI / Swagger](https://hypercat-net.github.io/heatmiser-neohub/swagger/) (secondary command catalogue)
 
-```bash
-python scripts/generate_openapi.py
-```
+Source markdown lives under [`docs/guide/`](docs/guide/) (product docs) and
+[`docs/neohub-api-rev-3.02.md`](docs/neohub-api-rev-3.02.md) (protocol).
 
-Build the static docs site locally (API HTML + Swagger UI):
+Build the site locally:
 
 ```bash
 pip install "markdown>=3.10" "PyYAML>=6.0.3"
@@ -36,7 +38,8 @@ python scripts/build_docs_site.py -o site
 open site/index.html
 ```
 
-GitHub Pages is published by [`.github/workflows/docs.yml`](.github/workflows/docs.yml) on pushes to `main`. In the GitHub repo settings, set **Pages → Source** to **GitHub Actions**.
+GitHub Pages is published by [`.github/workflows/docs.yml`](.github/workflows/docs.yml)
+on pushes to `main`.
 
 ## Installation
 
