@@ -6,6 +6,8 @@ locally generated cert).
 
 ## Install
 
+From [PyPI](https://pypi.org/project/heatmiser-neohub/):
+
 ```bash
 pip install heatmiser-neohub
 ```

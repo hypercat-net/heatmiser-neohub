@@ -10,6 +10,8 @@ WebSocket API (port `4243`), with LAN discovery via UDP `hubseek` (port `19790`)
 
 ## Quick start
 
+Install from [PyPI](https://pypi.org/project/heatmiser-neohub/), then:
+
 ```bash
 pip install heatmiser-neohub
 cp .env.example .env   # set NEOHUB_TOKEN (host optional if one hub on LAN)
@@ -41,6 +43,7 @@ needs the CLI or `NeoHubClient`.
 
 ## Links
 
+- [PyPI](https://pypi.org/project/heatmiser-neohub/)
 - [GitHub repository](https://github.com/hypercat-net/heatmiser-neohub)
 - [Docker Hub](https://hub.docker.com/r/hypercat42/heatmiser-neohub)
 - [neoHub product page](https://www.heatmiser.com/neohub-smart-control/)

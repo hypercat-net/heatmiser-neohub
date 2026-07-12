@@ -13,6 +13,7 @@ library implements.
 
 ## Related links
 
+- [PyPI](https://pypi.org/project/heatmiser-neohub/)
 - [neoHub smart control (product)](https://www.heatmiser.com/neohub-smart-control/)
 - [IMI Heatmiser Developer Portal](https://dev.heatmiser.com/)
 - [Official NeoHub API PDF](https://dev.heatmiser.com/uploads/short-url/b2K3JopBdu4sjcRz8WC0VYdca3R.pdf)
@@ -43,6 +44,8 @@ on pushes to `main`.
 
 ## Installation
 
+Install from [PyPI](https://pypi.org/project/heatmiser-neohub/):
+
 ```bash
 pip install heatmiser-neohub
 ```
@@ -56,7 +59,9 @@ pip install -e ".[dev]"
 ### Docker
 
 A slim multi-arch image (`linux/amd64`, `linux/arm64`) is published to Docker Hub as
-[`hypercat42/heatmiser-neohub`](https://hub.docker.com/r/hypercat42/heatmiser-neohub):
+[`hypercat42/heatmiser-neohub`](https://hub.docker.com/r/hypercat42/heatmiser-neohub).
+The image is built from this repository’s source (not installed from PyPI) so each
+tag matches the git commit that produced it.
 
 ```bash
 # Discovery uses UDP broadcast. Containers are isolated from the LAN by default,

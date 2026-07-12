@@ -5,6 +5,8 @@ a live hub.
 
 ## Install
 
+From [PyPI](https://pypi.org/project/heatmiser-neohub/):
+
 ```bash
 pip install heatmiser-neohub
 # or from a checkout:
@@ -12,7 +14,9 @@ pip install -e .
 ```
 
 Docker (multi-arch image
-[`hypercat42/heatmiser-neohub`](https://hub.docker.com/r/hypercat42/heatmiser-neohub)):
+[`hypercat42/heatmiser-neohub`](https://hub.docker.com/r/hypercat42/heatmiser-neohub)).
+The image installs from the git checkout in CI, not from PyPI, so the container
+matches the commit/tag being built.
 
 ```bash
 docker run --rm hypercat42/heatmiser-neohub --help

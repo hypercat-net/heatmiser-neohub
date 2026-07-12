@@ -1,4 +1,8 @@
 # syntax=docker/dockerfile:1
+#
+# Install from the build context (this repo), not from PyPI. The published
+# image must match the git commit/tag being built; installing from PyPI would
+# risk version drift and race with the PyPI publish workflow.
 
 FROM python:3.13-slim AS build
 
