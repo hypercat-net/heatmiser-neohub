@@ -25,12 +25,17 @@ dev = [
 [project.scripts]
 neohub = "heatmiser_neohub.cli:app"
 
+[project.urls]
+Homepage = "https://github.com/hypercat-net/heatmiser-neohub"
+Documentation = "https://hypercat-net.github.io/heatmiser-neohub/"
+Repository = "https://github.com/hypercat-net/heatmiser-neohub"
+Issues = "https://github.com/hypercat-net/heatmiser-neohub/issues"
+
 # hatchling auto-discovers the "src/heatmiser_neohub" package for the wheel
 # build target because it matches the normalized project name.
 [tool.hatch.build.targets.sdist]
 include = [
     "/src",
-    "/docs",
     "/README.md",
     "/LICENSE",
 ]

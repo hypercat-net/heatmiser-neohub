@@ -1,6 +1,6 @@
 # heatmiser-neohub
 
-[![CI](https://github.com/hypercat-net/heatmiser-neohub/actions/workflows/tests.yml/badge.svg)](https://github.com/hypercat-net/heatmiser-neohub/actions/workflows/tests.yml) [![Docs](https://github.com/hypercat-net/heatmiser-neohub/actions/workflows/docs.yml/badge.svg)](https://github.com/hypercat-net/heatmiser-neohub/actions/workflows/docs.yml) [![License](https://img.shields.io/github/license/hypercat-net/heatmiser-neohub)](https://github.com/hypercat-net/heatmiser-neohub/blob/main/LICENSE) [![Docker](https://img.shields.io/docker/v/hypercat42/heatmiser-neohub?label=docker)](https://hub.docker.com/r/hypercat42/heatmiser-neohub)
+[![CI](https://github.com/hypercat-net/heatmiser-neohub/actions/workflows/tests.yml/badge.svg)](https://github.com/hypercat-net/heatmiser-neohub/actions/workflows/tests.yml) [![Docs](https://github.com/hypercat-net/heatmiser-neohub/actions/workflows/docs.yml/badge.svg)](https://github.com/hypercat-net/heatmiser-neohub/actions/workflows/docs.yml) [![PyPI](https://img.shields.io/pypi/v/heatmiser-neohub)](https://pypi.org/project/heatmiser-neohub/) [![License](https://img.shields.io/github/license/hypercat-net/heatmiser-neohub)](https://github.com/hypercat-net/heatmiser-neohub/blob/main/LICENSE) [![Docker](https://img.shields.io/docker/v/hypercat42/heatmiser-neohub?label=docker)](https://hub.docker.com/r/hypercat42/heatmiser-neohub)
 
 Python client library and command-line interface for the IMI Heatmiser NeoHub API
 (WebSocket/WSS control interface on port 4243, plus UDP `hubseek` discovery on

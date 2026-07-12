@@ -32,6 +32,12 @@ python scripts/generate_openapi.py
 - OpenAPI: edit `scripts/generate_openapi.py`, run the generator, commit both
   the script and `docs/openapi/neohub-api.openapi.yaml`.
 
+## Releases (PyPI)
+
+Version bumps live in `pyproject.toml`. Tagging `v*` (or running the **PyPI**
+workflow manually) builds an sdist/wheel and uploads via Trusted Publishing
+(`.github/workflows/pypi.yaml`, GitHub Environment `pypi`).
+
 ## Reporting issues
 
 Use GitHub Issues and include:
