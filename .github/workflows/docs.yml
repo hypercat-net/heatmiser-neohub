@@ -1,0 +1,70 @@
+name: Docs
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "docs/**"
+      - "scripts/generate_openapi.py"
+      - "scripts/build_docs_site.py"
+      - ".github/workflows/docs.yml"
+      - "README.md"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.13"
+
+      - name: Install build deps
+        run: pip install "markdown>=3.10" "PyYAML>=6.0.3"
+
+      - name: Generate OpenAPI spec
+        run: python scripts/generate_openapi.py
+
+      - name: Validate OpenAPI YAML parses
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import yaml
+          path = Path("docs/openapi/neohub-api.openapi.yaml")
+          data = yaml.safe_load(path.read_text())
+          assert data["openapi"].startswith("3.")
+          assert "/commands/GET_LIVE_DATA" in data["paths"]
+          print(f"OK: {len(data['paths'])} paths")
+          PY
+
+      - name: Build GitHub Pages site
+        run: python scripts/build_docs_site.py -o site
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v5
+        with:
+          path: site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v5

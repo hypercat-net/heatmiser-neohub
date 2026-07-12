@@ -1,0 +1,40 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "heatmiser-neohub"
+version = "0.1.0"
+description = "Python client library and CLI for the IMI Heatmiser NeoHub API"
+readme = "README.md"
+requires-python = ">=3.11"
+license = "MIT"
+authors = [{ name = "Hypercat", email = "github@hypercat.net" }]
+dependencies = [
+    "websockets>=16.0",
+    "typer>=0.26.0",
+    "python-dotenv>=1.2.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=9.0",
+    "pytest-asyncio>=1.0",
+]
+
+[project.scripts]
+neohub = "heatmiser_neohub.cli:app"
+
+# hatchling auto-discovers the "src/heatmiser_neohub" package for the wheel
+# build target because it matches the normalized project name.
+[tool.hatch.build.targets.sdist]
+include = [
+    "/src",
+    "/docs",
+    "/README.md",
+    "/LICENSE",
+]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
