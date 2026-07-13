@@ -2,12 +2,22 @@
 
 from __future__ import annotations
 
+import re
+
 from typer.testing import CliRunner
 
 from heatmiser_neohub import __version__
 from heatmiser_neohub.cli import app
 
 runner = CliRunner()
+
+# Rich may colour help even when CliRunner passes color=False (e.g. in CI),
+# splitting "--version" into "-\x1b…-version" and breaking substring checks.
+_ANSI_RE = re.compile(r"\x1b\[[0-9;]*m")
+
+
+def _plain(text: str) -> str:
+    return _ANSI_RE.sub("", text)
 
 
 def test_version_flag() -> None:
@@ -23,10 +33,9 @@ def test_version_short_flag() -> None:
 
 
 def test_help_lists_global_options() -> None:
-    # Disable colour so Rich does not split "--version" across ANSI codes
-    # (e.g. "-\x1b[0m\x1b[1m-version"), which breaks substring checks in CI.
-    result = runner.invoke(app, ["--help"], color=False)
+    result = runner.invoke(app, ["--help"])
     assert result.exit_code == 0
-    assert "--version" in result.stdout
-    assert "--verbose" in result.stdout
-    assert "--debug" in result.stdout
+    help_text = _plain(result.stdout)
+    assert "--version" in help_text
+    assert "--verbose" in help_text
+    assert "--debug" in help_text
