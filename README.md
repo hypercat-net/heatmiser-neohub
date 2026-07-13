@@ -6,6 +6,14 @@ Python client library and command-line interface for the IMI Heatmiser NeoHub AP
 (WebSocket/WSS control interface on port 4243, plus UDP `hubseek` discovery on
 port 19790).
 
+### Stability (1.0)
+
+The public API is the symbols exported from `heatmiser_neohub` (client, models,
+discovery helpers, errors) and the CLI commands `discover`, `live-data`,
+`system`, and `cmd`. This release does **not** promise typed wrappers for every
+NeoHub command, WebSocket auto-reconnect, or raising on hub application-error
+payloads (those remain returned response data).
+
 [![BuyMeACoffee](https://raw.githubusercontent.com/barcar/buymeacoffee-badges/main/bmc-donate-white.svg)](https://buymeacoffee.com/barcar)
 
 See `docs/reference/neohub-api-rev-3.02.md` for the full protocol reference this

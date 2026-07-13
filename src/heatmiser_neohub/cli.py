@@ -140,7 +140,7 @@ def discover(
 def live_data(
     host: Optional[str] = HostOption,
     token: Optional[str] = TokenOption,
-    port: int = PortOption,
+    port: Optional[int] = PortOption,
 ) -> None:
     """Fetch and print GET_LIVE_DATA from the hub as JSON."""
     client = _make_client(host, token, port)
@@ -157,7 +157,7 @@ def live_data(
 def system(
     host: Optional[str] = HostOption,
     token: Optional[str] = TokenOption,
-    port: int = PortOption,
+    port: Optional[int] = PortOption,
 ) -> None:
     """Fetch and print GET_SYSTEM from the hub as JSON."""
     client = _make_client(host, token, port)
@@ -177,7 +177,7 @@ def cmd(
     ),
     host: Optional[str] = HostOption,
     token: Optional[str] = TokenOption,
-    port: int = PortOption,
+    port: Optional[int] = PortOption,
 ) -> None:
     """Send an arbitrary JSON command to the hub and print the raw response."""
     try:

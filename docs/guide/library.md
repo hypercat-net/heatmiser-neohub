@@ -4,6 +4,13 @@ Import from `heatmiser_neohub`. The client speaks the modern NeoHub **WSS** API 
 port **4243** (TLS certificate verification disabled by default — the hub uses a
 locally generated cert).
 
+## Stability (1.0)
+
+Public symbols are those exported from `heatmiser_neohub` (see `__all__`): the
+client, models, discovery helpers, and errors. The library is a thin protocol
+client — it does not wrap every NeoHub command, auto-reconnect dropped sockets,
+or raise on hub `{"error": …}` response payloads (those are returned as data).
+
 ## Install
 
 From [PyPI](https://pypi.org/project/heatmiser-neohub/):
