@@ -11,11 +11,13 @@ from __future__ import annotations
 
 import asyncio
 import json
+import logging
 from typing import Any, Awaitable, Optional
 
 import typer
 from dotenv import load_dotenv
 
+from heatmiser_neohub import __version__
 from heatmiser_neohub.client import NeoHubClient, NeoHubError, dumps_pretty
 from heatmiser_neohub.discover import DiscoveryError, discover_hubs, resolve_hub_host, resolve_hub_port
 
@@ -42,6 +44,55 @@ PortOption = typer.Option(
     envvar="NEOHUB_PORT",
     help="NeoHub WSS port. Defaults to 4243 when omitted.",
 )
+
+
+def _version_callback(value: bool) -> None:
+    if value:
+        typer.echo(__version__)
+        raise typer.Exit()
+
+
+def _configure_logging(*, verbose: bool, debug: bool) -> None:
+    if debug:
+        level = logging.DEBUG
+    elif verbose:
+        level = logging.INFO
+    else:
+        return
+    logging.basicConfig(
+        level=level,
+        format="%(asctime)s %(levelname)s %(name)s: %(message)s",
+        force=True,
+    )
+    logging.getLogger("heatmiser_neohub").setLevel(level)
+
+
+@app.callback()
+def main_options(
+    version: bool = typer.Option(
+        False,
+        "--version",
+        "-V",
+        help="Show package version and exit.",
+        callback=_version_callback,
+        is_eager=True,
+    ),
+    verbose: bool = typer.Option(
+        False,
+        "--verbose",
+        "-v",
+        help="Enable informational logging on stderr.",
+        envvar="NEOHUB_VERBOSE",
+    ),
+    debug: bool = typer.Option(
+        False,
+        "--debug",
+        help="Enable debug logging (includes request/response details).",
+        envvar="NEOHUB_DEBUG",
+    ),
+) -> None:
+    """Global options for the neohub CLI."""
+    _configure_logging(verbose=verbose, debug=debug)
 
 
 def _make_client(

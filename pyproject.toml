@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "heatmiser-neohub"
-version = "0.1.2"
+version = "0.1.3"
 description = "Python client library and CLI for the IMI Heatmiser NeoHub API"
 readme = "README.md"
 requires-python = ">=3.11"

@@ -116,10 +116,16 @@ neohub system
 
 # Send an arbitrary JSON command
 neohub cmd '{"GET_SYSTEM":0}'
+
+# Version / logging
+neohub --version
+neohub -v live-data
+neohub --debug cmd '{"FIRMWARE":0}'
 ```
 
-Each command also accepts `--host`, `--token`, and `--port` flags, which
-override the corresponding environment variables.
+Global options: `--version`/`-V`, `--verbose`/`-v`, `--debug` (also
+`NEOHUB_VERBOSE` / `NEOHUB_DEBUG`). Each command also accepts `--host`,
+`--token`, and `--port`, which override the corresponding environment variables.
 
 ## Library example
 

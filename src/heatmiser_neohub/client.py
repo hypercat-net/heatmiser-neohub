@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import asyncio
 import json
+import logging
 import os
 import ssl
 from typing import Any
@@ -12,6 +13,8 @@ from websockets.asyncio.client import ClientConnection, connect
 
 from heatmiser_neohub.models import LiveData, SystemInfo
 from heatmiser_neohub.protocol import build_request, parse_response
+
+logger = logging.getLogger(__name__)
 
 
 class NeoHubError(Exception):
@@ -79,12 +82,14 @@ class NeoHubClient:
         self._require_config()
         if self._ws is not None:
             return
+        logger.info("Connecting to %s", self.uri)
         self._ws = await connect(
             self.uri,
             ssl=self._ssl_context(),
             open_timeout=self.timeout,
             close_timeout=self.timeout,
         )
+        logger.debug("Connected to %s", self.uri)
 
     async def close(self) -> None:
         """Close the WebSocket connection if open."""
@@ -112,6 +117,8 @@ class NeoHubClient:
 
             cid = command_id if command_id is not None else self._next_command_id()
             payload = build_request(self.token, cmd, command_id=cid)
+            logger.info("Sending command_id=%s %s", cid, cmd)
+            logger.debug("Request frame (token redacted): %s", _redact_token(payload, self.token))
             await self._ws.send(payload)
 
             deadline = asyncio.get_running_loop().time() + self.timeout
@@ -130,7 +137,18 @@ class NeoHubClient:
 
                 parsed = parse_response(raw)
                 if parsed.get("command_id") == cid:
+                    logger.debug(
+                        "Response command_id=%s type=%s: %s",
+                        cid,
+                        parsed.get("message_type"),
+                        parsed.get("response"),
+                    )
                     return parsed["response"]
+                logger.debug(
+                    "Ignoring frame command_id=%s (waiting for %s)",
+                    parsed.get("command_id"),
+                    cid,
+                )
                 # Ignore unrelated frames and keep waiting for our command_id
 
     async def get_live_data(self) -> LiveData:
@@ -159,3 +177,10 @@ def dumps_pretty(obj: Any) -> str:
     if not isinstance(data, (dict, list)):
         data = json.loads(json.dumps(data, default=str))
     return json.dumps(data, indent=2, sort_keys=True)
+
+
+def _redact_token(payload: str, token: str) -> str:
+    """Replace the API token in a request frame before logging."""
+    if not token:
+        return payload
+    return payload.replace(token, "***")

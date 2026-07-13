@@ -35,6 +35,20 @@ to `.env` in your working directory, or export variables / pass flags.
 
 The CLI loads `.env` automatically via `python-dotenv` (real environment variables win).
 
+Global options (before the subcommand):
+
+| Flag | Env | Description |
+| --- | --- | --- |
+| `--version` / `-V` | | Print package version and exit |
+| `--verbose` / `-v` | `NEOHUB_VERBOSE` | Info logging on stderr |
+| `--debug` | `NEOHUB_DEBUG` | Debug logging (request/response; token redacted) |
+
+```bash
+neohub --version
+neohub -v live-data
+neohub --debug cmd '{"GET_SYSTEM":0}'
+```
+
 ## Commands
 
 ```bash
