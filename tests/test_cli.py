@@ -23,7 +23,9 @@ def test_version_short_flag() -> None:
 
 
 def test_help_lists_global_options() -> None:
-    result = runner.invoke(app, ["--help"])
+    # Disable colour so Rich does not split "--version" across ANSI codes
+    # (e.g. "-\x1b[0m\x1b[1m-version"), which breaks substring checks in CI.
+    result = runner.invoke(app, ["--help"], color=False)
     assert result.exit_code == 0
     assert "--version" in result.stdout
     assert "--verbose" in result.stdout
