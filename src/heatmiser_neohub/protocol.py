@@ -6,17 +6,32 @@ import json
 from typing import Any
 
 
-def build_request(token: str, command: dict[str, Any], command_id: int = 1) -> str:
+def encode_command(command: dict[str, Any] | str) -> str:
+    """Encode a NeoHub command for the WSS ``COMMAND`` field.
+
+    The hub expects Heatmiser's single-quoted pseudo-JSON (as in the official
+    docs: ``{'FIRMWARE':0}``), not standard JSON. Matching ``neohubapi``, we use
+    ``str(dict)`` for that format.
+    """
+    if isinstance(command, str):
+        return command
+    return str(command)
+
+
+def build_request(
+    token: str, command: dict[str, Any] | str, command_id: int = 1
+) -> str:
     """Build a WSS request for ``hm_get_command_queue``.
 
     The API nests a JSON string inside ``message`` that contains the token and
-    command list. ``COMMAND`` is itself a JSON-encoded command object.
+    command list. ``COMMAND`` is Heatmiser single-quoted pseudo-JSON (see
+    :func:`encode_command`).
     """
     inner = {
         "token": token,
         "COMMANDS": [
             {
-                "COMMAND": json.dumps(command, separators=(",", ":")),
+                "COMMAND": encode_command(command),
                 "COMMANDID": command_id,
             }
         ],

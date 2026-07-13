@@ -20,7 +20,16 @@ def test_build_request_wraps_command_and_token() -> None:
 
     command_entry = inner["COMMANDS"][0]
     assert command_entry["COMMANDID"] == 7
-    assert json.loads(command_entry["COMMAND"]) == {"GET_SYSTEM": 0}
+    # Hub expects Heatmiser single-quoted form, not JSON dumps.
+    assert command_entry["COMMAND"] == str({"GET_SYSTEM": 0})
+    assert command_entry["COMMAND"] == "{'GET_SYSTEM': 0}"
+
+
+def test_encode_command_accepts_string_passthrough() -> None:
+    from heatmiser_neohub.protocol import encode_command
+
+    assert encode_command("{'FIRMWARE':0}") == "{'FIRMWARE':0}"
+    assert encode_command({"FIRMWARE": 0}) == "{'FIRMWARE': 0}"
 
 
 def test_build_request_default_command_id() -> None:
