@@ -6,6 +6,9 @@ from dataclasses import dataclass, field
 from typing import Any
 
 
+_MISSING = object()
+
+
 def _as_float(value: Any, default: float | None = None) -> float | None:
     if value is None or value == "":
         return default
@@ -25,6 +28,15 @@ def _as_bool(value: Any) -> bool:
     return False
 
 
+def _parse_available_modes(value: Any) -> list[str] | None:
+    """Parse ``AVAILABLE_MODES``; ``None`` means the field was absent."""
+    if value is _MISSING:
+        return None
+    if not isinstance(value, list):
+        return None
+    return [str(item).casefold() for item in value]
+
+
 @dataclass(slots=True)
 class Device:
     """A zone/device entry from ``GET_LIVE_DATA``."""
@@ -34,6 +46,8 @@ class Device:
     actual_temp: float | None = None
     set_temp: float | None = None
     cool_temp: float | None = None
+    # None when AVAILABLE_MODES is absent from the payload (unknown capabilities).
+    available_modes: list[str] | None = None
     heat_on: bool = False
     cool_on: bool = False
     cool_mode: bool = False
@@ -58,8 +72,21 @@ class Device:
     fan_control: str | None = None
     floor_temp: float | None = None
     floor_limit: bool = False
+    relative_humidity: float | None = None
+    preheat_active: bool = False
+    modulation_level: float | None = None
     write_count: int | None = None
     raw: dict[str, Any] = field(default_factory=dict, repr=False)
+
+    def supports_mode(self, mode: str) -> bool:
+        """Return whether this device advertises ``mode`` in ``AVAILABLE_MODES``.
+
+        When the hub omits ``AVAILABLE_MODES``, capabilities are treated as
+        unknown and this returns ``True`` so callers keep existing behaviour.
+        """
+        if self.available_modes is None:
+            return True
+        return mode.casefold() in self.available_modes
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> Device:
@@ -75,6 +102,7 @@ class Device:
             actual_temp=_as_float(data.get("ACTUAL_TEMP")),
             set_temp=_as_float(data.get("SET_TEMP")),
             cool_temp=_as_float(data.get("COOL_TEMP")),
+            available_modes=_parse_available_modes(data.get("AVAILABLE_MODES", _MISSING)),
             heat_on=_as_bool(data.get("HEAT_ON")),
             cool_on=_as_bool(data.get("COOL_ON")),
             cool_mode=_as_bool(data.get("COOL_MODE")),
@@ -105,6 +133,9 @@ class Device:
             fan_control=data.get("FAN_CONTROL"),
             floor_temp=floor_temp,
             floor_limit=_as_bool(data.get("FLOOR_LIMIT")),
+            relative_humidity=_as_float(data.get("RELATIVE_HUMIDITY")),
+            preheat_active=_as_bool(data.get("PREHEAT_ACTIVE")),
+            modulation_level=_as_float(data.get("MODULATION_LEVEL")),
             write_count=(
                 int(data["WRITE_COUNT"]) if data.get("WRITE_COUNT") is not None else None
             ),

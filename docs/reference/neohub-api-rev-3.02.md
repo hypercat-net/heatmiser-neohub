@@ -159,6 +159,18 @@ Websocket commands take this format:
 
 Anything within the `message` section must remain **escaped**.
 
+#### COMMAND quoting vs standard JSON
+
+The outer WebSocket frame and the nested `message` object are [RFC 8259](https://www.rfc-editor.org/rfc/rfc8259) JSON (strings use double quotes, U+0022). The value of each `COMMAND` field is **not** standard JSON: Heatmiser documents it as a single-quoted pseudo-JSON object such as `{'FIRMWARE':0}`.
+
+Per RFC 8259 §7, a JSON string is wrapped in quotation marks (U+0022), and JSON object member names/strings likewise use double quotes. A payload of the form `{"FIRMWARE":0}` is therefore valid JSON, but the NeoHub rejects that form inside `COMMAND` with `{"error":"Invalid Json"}`. Use the Heatmiser single-quoted form instead (this library encodes it with Python `str(dict)`, matching `neohubapi`).
+
+| Layer | Format | Example |
+| --- | --- | --- |
+| Outer WSS frame | RFC 8259 JSON | `{"message_type":"hm_get_command_queue","message":"…"}` |
+| Nested `message` | RFC 8259 JSON (as a string) | `{"token":"…","COMMANDS":[…]}` |
+| `COMMAND` value | Heatmiser single-quoted form | `{'GET_LIVE_DATA': 0}` |
+
 **Sample response:**
 
 ```json

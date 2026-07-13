@@ -496,7 +496,8 @@ def build_spec() -> dict[str, Any]:
                 "description": (
                     f"Send NeoHub command `{name}` over the authenticated WSS "
                     f"envelope. The logical HTTP mapping exists only for documentation.\n\n"
-                    f"**Inner command JSON:** `{json.dumps(command_body)}`"
+                    f"**Logical command object:** `{json.dumps(command_body)}` "
+                    "(encoded to Heatmiser single-quoted form on the wire)"
                 ),
                 "requestBody": {
                     "required": True,
@@ -556,9 +557,16 @@ def build_spec() -> dict[str, Any]:
                 "```json\n"
                 "{\n"
                 '  \"message_type\": \"hm_get_command_queue\",\n'
-                '  \"message\": \"{\\\"token\\\":\\\"…\\\",\\\"COMMANDS\\\":[{\\\"COMMAND\\\":\\\"{\\\\\\\"GET_LIVE_DATA\\\\\\\":0}\\\",\\\"COMMANDID\\\":1}]}\"\n'
+                "  \"message\": \"{\\\"token\\\":\\\"…\\\",\\\"COMMANDS\\\":[{\\\"COMMAND\\\":\\\"{'GET_LIVE_DATA': 0}\\\",\\\"COMMANDID\\\":1}]}\"\n"
                 "}\n"
                 "```\n\n"
+                "The outer frame and nested `message` string are "
+                "[RFC 8259](https://www.rfc-editor.org/rfc/rfc8259) JSON "
+                "(double-quoted strings). The `COMMAND` **value** is not: Heatmiser "
+                "requires single-quoted pseudo-JSON such as `{'GET_LIVE_DATA': 0}`. "
+                "RFC 8259 §7 defines JSON strings with U+0022 quotation marks; "
+                "`{\"GET_LIVE_DATA\":0}` is valid JSON but the NeoHub rejects it "
+                "inside `COMMAND` with `Invalid Json`.\n\n"
                 "Responses use `message_type: hm_set_command_response` with a "
                 "stringified JSON `response` field.\n\n"
                 "## Related links\n\n"
@@ -637,7 +645,10 @@ def build_spec() -> dict[str, Any]:
                         "message": {
                             "type": "string",
                             "description": (
-                                "JSON string: {token, COMMANDS:[{COMMAND, COMMANDID}]}"
+                                "JSON string containing {token, COMMANDS:[{COMMAND, "
+                                "COMMANDID}]}. Outer/nested framing is RFC 8259 JSON; "
+                                "each COMMAND value is Heatmiser single-quoted form "
+                                "(e.g. {'GET_LIVE_DATA': 0}), not double-quoted JSON."
                             ),
                         },
                     },
@@ -645,7 +656,7 @@ def build_spec() -> dict[str, Any]:
                         "message_type": "hm_get_command_queue",
                         "message": (
                             '{"token":"YOUR_TOKEN","COMMANDS":['
-                            '{"COMMAND":"{\\"GET_LIVE_DATA\\":0}","COMMANDID":1}]}'
+                            '{"COMMAND":"{\'GET_LIVE_DATA\': 0}","COMMANDID":1}]}'
                         ),
                     },
                 },

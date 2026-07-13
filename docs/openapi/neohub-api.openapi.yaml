@@ -22,9 +22,15 @@ info:
     ```json
     {
       "message_type": "hm_get_command_queue",
-      "message": "{\"token\":\"…\",\"COMMANDS\":[{\"COMMAND\":\"{\\\"GET_LIVE_DATA\\\":0}\",\"COMMANDID\":1}]}"
+      "message": "{\"token\":\"…\",\"COMMANDS\":[{\"COMMAND\":\"{'GET_LIVE_DATA': 0}\",\"COMMANDID\":1}]}"
     }
     ```
+    
+    The outer frame and nested `message` string are [RFC 8259](https://www.rfc-editor.org/rfc/rfc8259)
+    JSON (double-quoted strings). The `COMMAND` **value** is not: Heatmiser requires
+    single-quoted pseudo-JSON such as `{'GET_LIVE_DATA': 0}`. RFC 8259 §7 defines JSON
+    strings with U+0022 quotation marks; `{"GET_LIVE_DATA":0}` is valid JSON but the
+    NeoHub rejects it inside `COMMAND` with `Invalid Json`.
     
     Responses use `message_type: hm_set_command_response` with a stringified JSON `response` field.
     
@@ -110,7 +116,7 @@ paths:
       description: |
         Send NeoHub command `AUTO_MODE_OFF` over the authenticated WSS envelope. The logical HTTP mapping exists only for documentation.
         
-        **Inner command JSON:** `{"AUTO_MODE_OFF": "HCtest"}`
+        **Logical command object:** `{"AUTO_MODE_OFF": "HCtest"}`
       requestBody:
         required: true
         content:
@@ -155,7 +161,7 @@ paths:
       description: |
         Send NeoHub command `AWAY_OFF` over the authenticated WSS envelope. The logical HTTP mapping exists only for documentation.
         
-        **Inner command JSON:** `{"AWAY_OFF": 0}`
+        **Logical command object:** `{"AWAY_OFF": 0}`
       requestBody:
         required: true
         content:
@@ -200,7 +206,7 @@ paths:
       description: |
         Send NeoHub command `AWAY_ON` over the authenticated WSS envelope. The logical HTTP mapping exists only for documentation.
         
-        **Inner command JSON:** `{"AWAY_ON": 0}`
+        **Logical command object:** `{"AWAY_ON": 0}`
       requestBody:
         required: true
         content:
@@ -245,7 +251,7 @@ paths:
       description: |
         Send NeoHub command `BOOST_OFF` over the authenticated WSS envelope. The logical HTTP mapping exists only for documentation.
         
-        **Inner command JSON:** `{"BOOST_OFF": [{"hours": 1, "minutes": 10}, ["clock"]]}`
+        **Logical command object:** `{"BOOST_OFF": [{"hours": 1, "minutes": 10}, ["clock"]]}`
       requestBody:
         required: true
         content:
@@ -306,7 +312,7 @@ paths:
       description: |
         Send NeoHub command `BOOST_ON` over the authenticated WSS envelope. The logical HTTP mapping exists only for documentation.
         
-        **Inner command JSON:** `{"BOOST_ON": [{"hours": 1, "minutes": 10}, ["clock"]]}`
+        **Logical command object:** `{"BOOST_ON": [{"hours": 1, "minutes": 10}, ["clock"]]}`
       requestBody:
         required: true
         content:
@@ -367,7 +373,7 @@ paths:
       description: |
         Send NeoHub command `CANCEL_HGROUP` over the authenticated WSS envelope. The logical HTTP mapping exists only for documentation.
         
-        **Inner command JSON:** `{"CANCEL_HGROUP": "Box"}`
+        **Logical command object:** `{"CANCEL_HGROUP": "Box"}`
       requestBody:
         required: true
         content:
@@ -399,7 +405,7 @@ paths:
       description: |
         Send NeoHub command `CANCEL_HOLD_ALL` over the authenticated WSS envelope. The logical HTTP mapping exists only for documentation.
         
-        **Inner command JSON:** `{"CANCEL_HOLD_ALL": 0}`
+        **Logical command object:** `{"CANCEL_HOLD_ALL": 0}`
       requestBody:
         required: true
         content:
@@ -432,7 +438,7 @@ paths:
       description: |
         Send NeoHub command `CANCEL_HOLIDAY` over the authenticated WSS envelope. The logical HTTP mapping exists only for documentation.
         
-        **Inner command JSON:** `{"CANCEL_HOLIDAY": 0}`
+        **Logical command object:** `{"CANCEL_HOLIDAY": 0}`
       requestBody:
         required: true
         content:
@@ -465,7 +471,7 @@ paths:
       description: |
         Send NeoHub command `CLEAR_CURRENT_PROFILE` over the authenticated WSS envelope. The logical HTTP mapping exists only for documentation.
         
-        **Inner command JSON:** `{"CLEAR_CURRENT_PROFILE": "kitchen"}`
+        **Logical command object:** `{"CLEAR_CURRENT_PROFILE": "kitchen"}`
       requestBody:
         required: true
         content:
@@ -510,7 +516,7 @@ paths:
       description: |
         Send NeoHub command `CLEAR_DEVICE_LIST` over the authenticated WSS envelope. The logical HTTP mapping exists only for documentation.
         
-        **Inner command JSON:** `{"CLEAR_DEVICE_LIST": "Kitchen"}`
+        **Logical command object:** `{"CLEAR_DEVICE_LIST": "Kitchen"}`
       requestBody:
         required: true
         content:
@@ -542,7 +548,7 @@ paths:
       description: |
         Send NeoHub command `CLEAR_PROFILE` over the authenticated WSS envelope. The logical HTTP mapping exists only for documentation.
         
-        **Inner command JSON:** `{"CLEAR_PROFILE": "winter"}`
+        **Logical command object:** `{"CLEAR_PROFILE": "winter"}`
       requestBody:
         required: true
         content:
@@ -574,7 +580,7 @@ paths:
       description: |
         Send NeoHub command `CLEAR_PROFILE_ID` over the authenticated WSS envelope. The logical HTTP mapping exists only for documentation.
         
-        **Inner command JSON:** `{"CLEAR_PROFILE_ID": 2}`
+        **Logical command object:** `{"CLEAR_PROFILE_ID": 2}`
       requestBody:
         required: true
         content:
@@ -606,7 +612,7 @@ paths:
       description: |
         Send NeoHub command `CREATE_GROUP` over the authenticated WSS envelope. The logical HTTP mapping exists only for documentation.
         
-        **Inner command JSON:** `{"CREATE_GROUP": [["lounge", "bed1"], "bob"]}`
+        **Logical command object:** `{"CREATE_GROUP": [["lounge", "bed1"], "bob"]}`
       requestBody:
         required: true
         content:
@@ -649,7 +655,7 @@ paths:
       description: |
         Send NeoHub command `DELETE_GROUP` over the authenticated WSS envelope. The logical HTTP mapping exists only for documentation.
         
-        **Inner command JSON:** `{"DELETE_GROUP": "bob"}`
+        **Logical command object:** `{"DELETE_GROUP": "bob"}`
       requestBody:
         required: true
         content:
@@ -681,7 +687,7 @@ paths:
       description: |
         Send NeoHub command `DELETE_RECIPE` over the authenticated WSS envelope. The logical HTTP mapping exists only for documentation.
         
-        **Inner command JSON:** `{"DELETE_RECIPE": "test4"}`
+        **Logical command object:** `{"DELETE_RECIPE": "test4"}`
       requestBody:
         required: true
         content:
@@ -713,7 +719,7 @@ paths:
       description: |
         Send NeoHub command `DETACH_DEVICE` over the authenticated WSS envelope. The logical HTTP mapping exists only for documentation.
         
-        **Inner command JSON:** `{"DETACH_DEVICE": ["Kitchen", "neoplug"]}`
+        **Logical command object:** `{"DETACH_DEVICE": ["Kitchen", "neoplug"]}`
       requestBody:
         required: true
         content:
@@ -754,7 +760,7 @@ paths:
       description: |
         Send NeoHub command `DEVICES_SN` over the authenticated WSS envelope. The logical HTTP mapping exists only for documentation.
         
-        **Inner command JSON:** `{"DEVICES_SN": 0}`
+        **Logical command object:** `{"DEVICES_SN": 0}`
       requestBody:
         required: true
         content:
@@ -787,7 +793,7 @@ paths:
       description: |
         Send NeoHub command `DST_OFF` over the authenticated WSS envelope. The logical HTTP mapping exists only for documentation.
         
-        **Inner command JSON:** `{"DST_OFF": 0}`
+        **Logical command object:** `{"DST_OFF": 0}`
       requestBody:
         required: true
         content:
@@ -820,7 +826,7 @@ paths:
       description: |
         Send NeoHub command `DST_ON` over the authenticated WSS envelope. The logical HTTP mapping exists only for documentation.
         
-        **Inner command JSON:** `{"DST_ON": "UK"}`
+        **Logical command object:** `{"DST_ON": "UK"}`
       requestBody:
         required: true
         content:
@@ -859,7 +865,7 @@ paths:
       description: |
         Send NeoHub command `ENGINEERS_DATA` over the authenticated WSS envelope. The logical HTTP mapping exists only for documentation.
         
-        **Inner command JSON:** `{"ENGINEERS_DATA": 0}`
+        **Logical command object:** `{"ENGINEERS_DATA": 0}`
       requestBody:
         required: true
         content:
@@ -892,7 +898,7 @@ paths:
       description: |
         Send NeoHub command `FIRMWARE` over the authenticated WSS envelope. The logical HTTP mapping exists only for documentation.
         
-        **Inner command JSON:** `{"FIRMWARE": 0}`
+        **Logical command object:** `{"FIRMWARE": 0}`
       requestBody:
         required: true
         content:
@@ -925,7 +931,7 @@ paths:
       description: |
         Send NeoHub command `FROST_OFF` over the authenticated WSS envelope. The logical HTTP mapping exists only for documentation.
         
-        **Inner command JSON:** `{"FROST_OFF": ["bed1", "lounge"]}`
+        **Logical command object:** `{"FROST_OFF": ["bed1", "lounge"]}`
       requestBody:
         required: true
         content:
@@ -972,7 +978,7 @@ paths:
       description: |
         Send NeoHub command `FROST_ON` over the authenticated WSS envelope. The logical HTTP mapping exists only for documentation.
         
-        **Inner command JSON:** `{"FROST_ON": ["bed1", "lounge"]}`
+        **Logical command object:** `{"FROST_ON": ["bed1", "lounge"]}`
       requestBody:
         required: true
         content:
@@ -1019,7 +1025,7 @@ paths:
       description: |
         Send NeoHub command `GET_DEVICE_LIST` over the authenticated WSS envelope. The logical HTTP mapping exists only for documentation.
         
-        **Inner command JSON:** `{"GET_DEVICE_LIST": "Kitchen"}`
+        **Logical command object:** `{"GET_DEVICE_LIST": "Kitchen"}`
       requestBody:
         required: true
         content:
@@ -1051,7 +1057,7 @@ paths:
       description: |
         Send NeoHub command `GET_DEVICES` over the authenticated WSS envelope. The logical HTTP mapping exists only for documentation.
         
-        **Inner command JSON:** `{"GET_DEVICES": 0}`
+        **Logical command object:** `{"GET_DEVICES": 0}`
       requestBody:
         required: true
         content:
@@ -1084,7 +1090,7 @@ paths:
       description: |
         Send NeoHub command `GET_ENGINEERS` over the authenticated WSS envelope. The logical HTTP mapping exists only for documentation.
         
-        **Inner command JSON:** `{"GET_ENGINEERS": 0}`
+        **Logical command object:** `{"GET_ENGINEERS": 0}`
       requestBody:
         required: true
         content:
@@ -1117,7 +1123,7 @@ paths:
       description: |
         Send NeoHub command `GET_GROUPS` over the authenticated WSS envelope. The logical HTTP mapping exists only for documentation.
         
-        **Inner command JSON:** `{"GET_GROUPS": 0}`
+        **Logical command object:** `{"GET_GROUPS": 0}`
       requestBody:
         required: true
         content:
@@ -1150,7 +1156,7 @@ paths:
       description: |
         Send NeoHub command `GET_HOLD` over the authenticated WSS envelope. The logical HTTP mapping exists only for documentation.
         
-        **Inner command JSON:** `{"GET_HOLD": 0}`
+        **Logical command object:** `{"GET_HOLD": 0}`
       requestBody:
         required: true
         content:
@@ -1183,7 +1189,7 @@ paths:
       description: |
         Send NeoHub command `GET_HOLIDAY` over the authenticated WSS envelope. The logical HTTP mapping exists only for documentation.
         
-        **Inner command JSON:** `{"GET_HOLIDAY": 0}`
+        **Logical command object:** `{"GET_HOLIDAY": 0}`
       requestBody:
         required: true
         content:
@@ -1216,7 +1222,7 @@ paths:
       description: |
         Send NeoHub command `GET_HOURSRUN` over the authenticated WSS envelope. The logical HTTP mapping exists only for documentation.
         
-        **Inner command JSON:** `{"GET_HOURSRUN": "Kitchen"}`
+        **Logical command object:** `{"GET_HOURSRUN": "Kitchen"}`
       requestBody:
         required: true
         content:
@@ -1261,7 +1267,7 @@ paths:
       description: |
         Send NeoHub command `GET_LIVE_DATA` over the authenticated WSS envelope. The logical HTTP mapping exists only for documentation.
         
-        **Inner command JSON:** `{"GET_LIVE_DATA": 0}`
+        **Logical command object:** `{"GET_LIVE_DATA": 0}`
       requestBody:
         required: true
         content:
@@ -1294,7 +1300,7 @@ paths:
       description: |
         Send NeoHub command `GET_PROFILE` over the authenticated WSS envelope. The logical HTTP mapping exists only for documentation.
         
-        **Inner command JSON:** `{"GET_PROFILE": "kitchen"}`
+        **Logical command object:** `{"GET_PROFILE": "kitchen"}`
       requestBody:
         required: true
         content:
@@ -1326,7 +1332,7 @@ paths:
       description: |
         Send NeoHub command `GET_PROFILE_0` over the authenticated WSS envelope. The logical HTTP mapping exists only for documentation.
         
-        **Inner command JSON:** `{"GET_PROFILE_0": "Bathroom"}`
+        **Logical command object:** `{"GET_PROFILE_0": "Bathroom"}`
       requestBody:
         required: true
         content:
@@ -1371,7 +1377,7 @@ paths:
       description: |
         Send NeoHub command `GET_PROFILE_NAMES` over the authenticated WSS envelope. The logical HTTP mapping exists only for documentation.
         
-        **Inner command JSON:** `{"GET_PROFILE_NAMES": 0}`
+        **Logical command object:** `{"GET_PROFILE_NAMES": 0}`
       requestBody:
         required: true
         content:
@@ -1404,7 +1410,7 @@ paths:
       description: |
         Send NeoHub command `GET_PROFILE_TIMERS` over the authenticated WSS envelope. The logical HTTP mapping exists only for documentation.
         
-        **Inner command JSON:** `{"GET_PROFILE_TIMERS": 0}`
+        **Logical command object:** `{"GET_PROFILE_TIMERS": 0}`
       requestBody:
         required: true
         content:
@@ -1437,7 +1443,7 @@ paths:
       description: |
         Send NeoHub command `GET_PROFILES` over the authenticated WSS envelope. The logical HTTP mapping exists only for documentation.
         
-        **Inner command JSON:** `{"GET_PROFILES": 0}`
+        **Logical command object:** `{"GET_PROFILES": 0}`
       requestBody:
         required: true
         content:
@@ -1470,7 +1476,7 @@ paths:
       description: |
         Send NeoHub command `GET_RECIPES` over the authenticated WSS envelope. The logical HTTP mapping exists only for documentation.
         
-        **Inner command JSON:** `{"GET_RECIPES": 0}`
+        **Logical command object:** `{"GET_RECIPES": 0}`
       requestBody:
         required: true
         content:
@@ -1503,7 +1509,7 @@ paths:
       description: |
         Send NeoHub command `GET_SYSTEM` over the authenticated WSS envelope. The logical HTTP mapping exists only for documentation.
         
-        **Inner command JSON:** `{"GET_SYSTEM": 0}`
+        **Logical command object:** `{"GET_SYSTEM": 0}`
       requestBody:
         required: true
         content:
@@ -1536,7 +1542,7 @@ paths:
       description: |
         Send NeoHub command `GET_TEMPLOG` over the authenticated WSS envelope. The logical HTTP mapping exists only for documentation.
         
-        **Inner command JSON:** `{"GET_TEMPLOG": ["Kitchen"]}`
+        **Logical command object:** `{"GET_TEMPLOG": ["Kitchen"]}`
       requestBody:
         required: true
         content:
@@ -1582,7 +1588,7 @@ paths:
       description: |
         Send NeoHub command `GET_TIMER_0` over the authenticated WSS envelope. The logical HTTP mapping exists only for documentation.
         
-        **Inner command JSON:** `{"GET_TIMER_0": "Timer"}`
+        **Logical command object:** `{"GET_TIMER_0": "Timer"}`
       requestBody:
         required: true
         content:
@@ -1627,7 +1633,7 @@ paths:
       description: |
         Send NeoHub command `GET_ZONES` over the authenticated WSS envelope. The logical HTTP mapping exists only for documentation.
         
-        **Inner command JSON:** `{"GET_ZONES": 0}`
+        **Logical command object:** `{"GET_ZONES": 0}`
       requestBody:
         required: true
         content:
@@ -1660,7 +1666,7 @@ paths:
       description: |
         Send NeoHub command `GLOBAL_DEV_LIST` over the authenticated WSS envelope. The logical HTTP mapping exists only for documentation.
         
-        **Inner command JSON:** `{"GLOBAL_DEV_LIST": ["lounge"]}`
+        **Logical command object:** `{"GLOBAL_DEV_LIST": ["lounge"]}`
       requestBody:
         required: true
         content:
@@ -1706,7 +1712,7 @@ paths:
       description: |
         Send NeoHub command `GLOBAL_SYSTEM_TYPE` over the authenticated WSS envelope. The logical HTTP mapping exists only for documentation.
         
-        **Inner command JSON:** `{"GLOBAL_SYSTEM_TYPE": "HeatOrCool"}`
+        **Logical command object:** `{"GLOBAL_SYSTEM_TYPE": "HeatOrCool"}`
       requestBody:
         required: true
         content:
@@ -1738,7 +1744,7 @@ paths:
       description: |
         Send NeoHub command `HOLD` over the authenticated WSS envelope. The logical HTTP mapping exists only for documentation.
         
-        **Inner command JSON:** `{"HOLD": [{"temp": 16, "hours": 2, "minutes": 30, "id": "Box"}, ["Kitchen"]]}`
+        **Logical command object:** `{"HOLD": [{"temp": 16, "hours": 2, "minutes": 30, "id": "Box"}, ["Kitchen"]]}`
       requestBody:
         required: true
         content:
@@ -1804,7 +1810,7 @@ paths:
       description: |
         Send NeoHub command `HOLIDAY` over the authenticated WSS envelope. The logical HTTP mapping exists only for documentation.
         
-        **Inner command JSON:** `{"HOLIDAY": ["14450001062016", "14450002062016"]}`
+        **Logical command object:** `{"HOLIDAY": ["14450001062016", "14450002062016"]}`
       requestBody:
         required: true
         content:
@@ -1844,7 +1850,7 @@ paths:
       description: |
         Send NeoHub command `IDENTIFY` over the authenticated WSS envelope. The logical HTTP mapping exists only for documentation.
         
-        **Inner command JSON:** `{"IDENTIFY": 0}`
+        **Logical command object:** `{"IDENTIFY": 0}`
       requestBody:
         required: true
         content:
@@ -1877,7 +1883,7 @@ paths:
       description: |
         Send NeoHub command `IDENTIFY_DEV` over the authenticated WSS envelope. The logical HTTP mapping exists only for documentation.
         
-        **Inner command JSON:** `{"IDENTIFY_DEV": "test"}`
+        **Logical command object:** `{"IDENTIFY_DEV": "test"}`
       requestBody:
         required: true
         content:
@@ -1909,7 +1915,7 @@ paths:
       description: |
         Send NeoHub command `INFO` over the authenticated WSS envelope. The logical HTTP mapping exists only for documentation.
         
-        **Inner command JSON:** `{"INFO": 0}`
+        **Logical command object:** `{"INFO": 0}`
       requestBody:
         required: true
         content:
@@ -1942,7 +1948,7 @@ paths:
       description: |
         Send NeoHub command `LINK_DEVICE` over the authenticated WSS envelope. The logical HTTP mapping exists only for documentation.
         
-        **Inner command JSON:** `{"LINK_DEVICE": ["Kitchen", "neoplug"]}`
+        **Logical command object:** `{"LINK_DEVICE": ["Kitchen", "neoplug"]}`
       requestBody:
         required: true
         content:
@@ -1983,7 +1989,7 @@ paths:
       description: |
         Send NeoHub command `LOCK` over the authenticated WSS envelope. The logical HTTP mapping exists only for documentation.
         
-        **Inner command JSON:** `{"LOCK": [[1, 2, 3, 4], ["Bathroom", "kitchen"]]}`
+        **Logical command object:** `{"LOCK": [[1, 2, 3, 4], ["Bathroom", "kitchen"]]}`
       requestBody:
         required: true
         content:
@@ -2045,7 +2051,7 @@ paths:
       description: |
         Send NeoHub command `MANUAL_DST` over the authenticated WSS envelope. The logical HTTP mapping exists only for documentation.
         
-        **Inner command JSON:** `{"MANUAL_DST": 0}`
+        **Logical command object:** `{"MANUAL_DST": 0}`
       requestBody:
         required: true
         content:
@@ -2077,7 +2083,7 @@ paths:
       description: |
         Send NeoHub command `MANUAL_OFF` over the authenticated WSS envelope. The logical HTTP mapping exists only for documentation.
         
-        **Inner command JSON:** `{"MANUAL_OFF": "plug"}`
+        **Logical command object:** `{"MANUAL_OFF": "plug"}`
       requestBody:
         required: true
         content:
@@ -2122,7 +2128,7 @@ paths:
       description: |
         Send NeoHub command `MANUAL_ON` over the authenticated WSS envelope. The logical HTTP mapping exists only for documentation.
         
-        **Inner command JSON:** `{"MANUAL_ON": "plug"}`
+        **Logical command object:** `{"MANUAL_ON": "plug"}`
       requestBody:
         required: true
         content:
@@ -2167,7 +2173,7 @@ paths:
       description: |
         Send NeoHub command `NTP_OFF` over the authenticated WSS envelope. The logical HTTP mapping exists only for documentation.
         
-        **Inner command JSON:** `{"NTP_OFF": 0}`
+        **Logical command object:** `{"NTP_OFF": 0}`
       requestBody:
         required: true
         content:
@@ -2200,7 +2206,7 @@ paths:
       description: |
         Send NeoHub command `NTP_ON` over the authenticated WSS envelope. The logical HTTP mapping exists only for documentation.
         
-        **Inner command JSON:** `{"NTP_ON": 0}`
+        **Logical command object:** `{"NTP_ON": 0}`
       requestBody:
         required: true
         content:
@@ -2233,7 +2239,7 @@ paths:
       description: |
         Send NeoHub command `PERMIT_JOIN` over the authenticated WSS envelope. The logical HTTP mapping exists only for documentation.
         
-        **Inner command JSON:** `{"PERMIT_JOIN": [120, "kitchen"]}`
+        **Logical command object:** `{"PERMIT_JOIN": [120, "kitchen"]}`
       requestBody:
         required: true
         content:
@@ -2283,7 +2289,7 @@ paths:
       description: |
         Send NeoHub command `PROFILE_TITLE` over the authenticated WSS envelope. The logical HTTP mapping exists only for documentation.
         
-        **Inner command JSON:** `{"PROFILE_TITLE": ["Summer", "Winter"]}`
+        **Logical command object:** `{"PROFILE_TITLE": ["Summer", "Winter"]}`
       requestBody:
         required: true
         content:
@@ -2321,7 +2327,7 @@ paths:
       description: |
         Send NeoHub command `READ_COMFORT_LEVELS` over the authenticated WSS envelope. The logical HTTP mapping exists only for documentation.
         
-        **Inner command JSON:** `{"READ_COMFORT_LEVELS": "kitchen"}`
+        **Logical command object:** `{"READ_COMFORT_LEVELS": "kitchen"}`
       requestBody:
         required: true
         content:
@@ -2366,7 +2372,7 @@ paths:
       description: |
         Send NeoHub command `READ_DCB` over the authenticated WSS envelope. The logical HTTP mapping exists only for documentation.
         
-        **Inner command JSON:** `{"READ_DCB": 100}`
+        **Logical command object:** `{"READ_DCB": 100}`
       requestBody:
         required: true
         content:
@@ -2398,7 +2404,7 @@ paths:
       description: |
         Send NeoHub command `READ_TIMECLOCK` over the authenticated WSS envelope. The logical HTTP mapping exists only for documentation.
         
-        **Inner command JSON:** `{"READ_TIMECLOCK": "Hot water"}`
+        **Logical command object:** `{"READ_TIMECLOCK": "Hot water"}`
       requestBody:
         required: true
         content:
@@ -2443,7 +2449,7 @@ paths:
       description: |
         Send NeoHub command `REMOVE_REPEATER` over the authenticated WSS envelope. The logical HTTP mapping exists only for documentation.
         
-        **Inner command JSON:** `{"REMOVE_REPEATER": "repeaternode12345"}`
+        **Logical command object:** `{"REMOVE_REPEATER": "repeaternode12345"}`
       requestBody:
         required: true
         content:
@@ -2475,7 +2481,7 @@ paths:
       description: |
         Send NeoHub command `REMOVE_ZONE` over the authenticated WSS envelope. The logical HTTP mapping exists only for documentation.
         
-        **Inner command JSON:** `{"REMOVE_ZONE": "test"}`
+        **Logical command object:** `{"REMOVE_ZONE": "test"}`
       requestBody:
         required: true
         content:
@@ -2507,7 +2513,7 @@ paths:
       description: |
         Send NeoHub command `RESET` over the authenticated WSS envelope. The logical HTTP mapping exists only for documentation.
         
-        **Inner command JSON:** `{"RESET": 0}`
+        **Logical command object:** `{"RESET": 0}`
       requestBody:
         required: true
         content:
@@ -2540,7 +2546,7 @@ paths:
       description: |
         Send NeoHub command `RUN_PROFILE` over the authenticated WSS envelope. The logical HTTP mapping exists only for documentation.
         
-        **Inner command JSON:** `{"RUN_PROFILE": "winter"}`
+        **Logical command object:** `{"RUN_PROFILE": "winter"}`
       requestBody:
         required: true
         content:
@@ -2572,7 +2578,7 @@ paths:
       description: |
         Send NeoHub command `RUN_PROFILE_ID` over the authenticated WSS envelope. The logical HTTP mapping exists only for documentation.
         
-        **Inner command JSON:** `{"RUN_PROFILE_ID": [25, "Kitchen", "Lounge"]}`
+        **Logical command object:** `{"RUN_PROFILE_ID": [25, "Kitchen", "Lounge"]}`
       requestBody:
         required: true
         content:
@@ -2615,7 +2621,7 @@ paths:
       description: |
         Send NeoHub command `RUN_RECIPE` over the authenticated WSS envelope. The logical HTTP mapping exists only for documentation.
         
-        **Inner command JSON:** `{"RUN_RECIPE": ["test2"]}`
+        **Logical command object:** `{"RUN_RECIPE": ["test2"]}`
       requestBody:
         required: true
         content:
@@ -2653,7 +2659,7 @@ paths:
       description: |
         Send NeoHub command `SET_CHANNEL` over the authenticated WSS envelope. The logical HTTP mapping exists only for documentation.
         
-        **Inner command JSON:** `{"SET_CHANNEL": 11}`
+        **Logical command object:** `{"SET_CHANNEL": 11}`
       requestBody:
         required: true
         content:
@@ -2685,7 +2691,7 @@ paths:
       description: |
         Send NeoHub command `SET_CLOSE_DELAY` over the authenticated WSS envelope. The logical HTTP mapping exists only for documentation.
         
-        **Inner command JSON:** `{"SET_CLOSE_DELAY": 10}`
+        **Logical command object:** `{"SET_CLOSE_DELAY": 10}`
       requestBody:
         required: true
         content:
@@ -2717,7 +2723,7 @@ paths:
       description: |
         Send NeoHub command `SET_COMFORT_LEVELS` over the authenticated WSS envelope. The logical HTTP mapping exists only for documentation.
         
-        **Inner command JSON:** `{"SET_COMFORT_LEVELS": {}}`
+        **Logical command object:** `{"SET_COMFORT_LEVELS": {}}`
       requestBody:
         required: true
         content:
@@ -2750,7 +2756,7 @@ paths:
       description: |
         Send NeoHub command `SET_COOL_TEMP` over the authenticated WSS envelope. The logical HTTP mapping exists only for documentation.
         
-        **Inner command JSON:** `{"SET_COOL_TEMP": [27.5, "HCtest"]}`
+        **Logical command object:** `{"SET_COOL_TEMP": [27.5, "HCtest"]}`
       requestBody:
         required: true
         content:
@@ -2802,7 +2808,7 @@ paths:
       description: |
         Send NeoHub command `SET_DATE` over the authenticated WSS envelope. The logical HTTP mapping exists only for documentation.
         
-        **Inner command JSON:** `{"SET_DATE": [2018, 12, 9]}`
+        **Logical command object:** `{"SET_DATE": [2018, 12, 9]}`
       requestBody:
         required: true
         content:
@@ -2847,7 +2853,7 @@ paths:
       description: |
         Send NeoHub command `SET_DELAY` over the authenticated WSS envelope. The logical HTTP mapping exists only for documentation.
         
-        **Inner command JSON:** `{"SET_DELAY": [5, "test"]}`
+        **Logical command object:** `{"SET_DELAY": [5, "test"]}`
       requestBody:
         required: true
         content:
@@ -2899,7 +2905,7 @@ paths:
       description: |
         Send NeoHub command `SET_DIFF` over the authenticated WSS envelope. The logical HTTP mapping exists only for documentation.
         
-        **Inner command JSON:** `{"SET_DIFF": [2, ["test"]]}`
+        **Logical command object:** `{"SET_DIFF": [2, ["test"]]}`
       requestBody:
         required: true
         content:
@@ -2951,7 +2957,7 @@ paths:
       description: |
         Send NeoHub command `SET_FAILSAFE` over the authenticated WSS envelope. The logical HTTP mapping exists only for documentation.
         
-        **Inner command JSON:** `{"SET_FAILSAFE": [true, "neoair"]}`
+        **Logical command object:** `{"SET_FAILSAFE": [true, "neoair"]}`
       requestBody:
         required: true
         content:
@@ -2990,7 +2996,7 @@ paths:
       description: |
         Send NeoHub command `SET_FAN_SPEED` over the authenticated WSS envelope. The logical HTTP mapping exists only for documentation.
         
-        **Inner command JSON:** `{"SET_FAN_SPEED": ["HIGH", ["HCtest"]]}`
+        **Logical command object:** `{"SET_FAN_SPEED": ["HIGH", ["HCtest"]]}`
       requestBody:
         required: true
         content:
@@ -3048,7 +3054,7 @@ paths:
       description: |
         Send NeoHub command `SET_FLOOR` over the authenticated WSS envelope. The logical HTTP mapping exists only for documentation.
         
-        **Inner command JSON:** `{"SET_FLOOR": [28, "floor1"]}`
+        **Logical command object:** `{"SET_FLOOR": [28, "floor1"]}`
       requestBody:
         required: true
         content:
@@ -3100,7 +3106,7 @@ paths:
       description: |
         Send NeoHub command `SET_FORMAT` over the authenticated WSS envelope. The logical HTTP mapping exists only for documentation.
         
-        **Inner command JSON:** `{"SET_FORMAT": "7DAY"}`
+        **Logical command object:** `{"SET_FORMAT": "7DAY"}`
       requestBody:
         required: true
         content:
@@ -3132,7 +3138,7 @@ paths:
       description: |
         Send NeoHub command `SET_FROST` over the authenticated WSS envelope. The logical HTTP mapping exists only for documentation.
         
-        **Inner command JSON:** `{"SET_FROST": [9, "test"]}`
+        **Logical command object:** `{"SET_FROST": [9, "test"]}`
       requestBody:
         required: true
         content:
@@ -3184,7 +3190,7 @@ paths:
       description: |
         Send NeoHub command `SET_GLOBAL_HC_MODE` over the authenticated WSS envelope. The logical HTTP mapping exists only for documentation.
         
-        **Inner command JSON:** `{"SET_GLOBAL_HC_MODE": "heating"}`
+        **Logical command object:** `{"SET_GLOBAL_HC_MODE": "heating"}`
       requestBody:
         required: true
         content:
@@ -3216,7 +3222,7 @@ paths:
       description: |
         Send NeoHub command `SET_HC_MODE` over the authenticated WSS envelope. The logical HTTP mapping exists only for documentation.
         
-        **Inner command JSON:** `{"SET_HC_MODE": ["COOLING", ["Device1"]]}`
+        **Logical command object:** `{"SET_HC_MODE": ["COOLING", ["Device1"]]}`
       requestBody:
         required: true
         content:
@@ -3273,7 +3279,7 @@ paths:
       description: |
         Send NeoHub command `SET_LEVEL_4` over the authenticated WSS envelope. The logical HTTP mapping exists only for documentation.
         
-        **Inner command JSON:** `{"SET_LEVEL_4": 0}`
+        **Logical command object:** `{"SET_LEVEL_4": 0}`
       requestBody:
         required: true
         content:
@@ -3306,7 +3312,7 @@ paths:
       description: |
         Send NeoHub command `SET_LEVEL_6` over the authenticated WSS envelope. The logical HTTP mapping exists only for documentation.
         
-        **Inner command JSON:** `{"SET_LEVEL_6": 0}`
+        **Logical command object:** `{"SET_LEVEL_6": 0}`
       requestBody:
         required: true
         content:
@@ -3339,7 +3345,7 @@ paths:
       description: |
         Send NeoHub command `SET_OPEN_DELAY` over the authenticated WSS envelope. The logical HTTP mapping exists only for documentation.
         
-        **Inner command JSON:** `{"SET_OPEN_DELAY": 10}`
+        **Logical command object:** `{"SET_OPEN_DELAY": 10}`
       requestBody:
         required: true
         content:
@@ -3371,7 +3377,7 @@ paths:
       description: |
         Send NeoHub command `SET_PREHEAT` over the authenticated WSS envelope. The logical HTTP mapping exists only for documentation.
         
-        **Inner command JSON:** `{"SET_PREHEAT": [3, "Bathroom"]}`
+        **Logical command object:** `{"SET_PREHEAT": [3, "Bathroom"]}`
       requestBody:
         required: true
         content:
@@ -3423,7 +3429,7 @@ paths:
       description: |
         Send NeoHub command `SET_RF_MODE` over the authenticated WSS envelope. The logical HTTP mapping exists only for documentation.
         
-        **Inner command JSON:** `{"SET_RF_MODE": ["mix", "Kitchen"]}`
+        **Logical command object:** `{"SET_RF_MODE": ["mix", "Kitchen"]}`
       requestBody:
         required: true
         content:
@@ -3482,7 +3488,7 @@ paths:
       description: |
         Send NeoHub command `SET_TEMP` over the authenticated WSS envelope. The logical HTTP mapping exists only for documentation.
         
-        **Inner command JSON:** `{"SET_TEMP": [21.5, "Zone 3"]}`
+        **Logical command object:** `{"SET_TEMP": [21.5, "Zone 3"]}`
       requestBody:
         required: true
         content:
@@ -3534,7 +3540,7 @@ paths:
       description: |
         Send NeoHub command `SET_TEMP_FORMAT` over the authenticated WSS envelope. The logical HTTP mapping exists only for documentation.
         
-        **Inner command JSON:** `{"SET_TEMP_FORMAT": "C"}`
+        **Logical command object:** `{"SET_TEMP_FORMAT": "C"}`
       requestBody:
         required: true
         content:
@@ -3566,7 +3572,7 @@ paths:
       description: |
         Send NeoHub command `SET_TIME` over the authenticated WSS envelope. The logical HTTP mapping exists only for documentation.
         
-        **Inner command JSON:** `{"SET_TIME": [14, 25]}`
+        **Logical command object:** `{"SET_TIME": [14, 25]}`
       requestBody:
         required: true
         content:
@@ -3609,7 +3615,7 @@ paths:
       description: |
         Send NeoHub command `SET_TIMECLOCK` over the authenticated WSS envelope. The logical HTTP mapping exists only for documentation.
         
-        **Inner command JSON:** `{"SET_TIMECLOCK": [{}, "Hot water"]}`
+        **Logical command object:** `{"SET_TIMECLOCK": [{}, "Hot water"]}`
       requestBody:
         required: true
         content:
@@ -3662,7 +3668,7 @@ paths:
       description: |
         Send NeoHub command `STATISTICS` over the authenticated WSS envelope. The logical HTTP mapping exists only for documentation.
         
-        **Inner command JSON:** `{"STATISTICS": 0}`
+        **Logical command object:** `{"STATISTICS": 0}`
       requestBody:
         required: true
         content:
@@ -3695,7 +3701,7 @@ paths:
       description: |
         Send NeoHub command `STORE_PROFILE` over the authenticated WSS envelope. The logical HTTP mapping exists only for documentation.
         
-        **Inner command JSON:** `{"STORE_PROFILE": {"info": {}, "name": "my profile"}}`
+        **Logical command object:** `{"STORE_PROFILE": {"info": {}, "name": "my profile"}}`
       requestBody:
         required: true
         content:
@@ -3730,7 +3736,7 @@ paths:
       description: |
         Send NeoHub command `STORE_PROFILE2` over the authenticated WSS envelope. The logical HTTP mapping exists only for documentation.
         
-        **Inner command JSON:** `{"STORE_PROFILE2": {"info": {}, "name": "my profile"}}`
+        **Logical command object:** `{"STORE_PROFILE2": {"info": {}, "name": "my profile"}}`
       requestBody:
         required: true
         content:
@@ -3765,7 +3771,7 @@ paths:
       description: |
         Send NeoHub command `STORE_PROFILE_0` over the authenticated WSS envelope. The logical HTTP mapping exists only for documentation.
         
-        **Inner command JSON:** `{"STORE_PROFILE_0": [{}, "bedroom1"]}`
+        **Logical command object:** `{"STORE_PROFILE_0": [{}, "bedroom1"]}`
       requestBody:
         required: true
         content:
@@ -3800,7 +3806,7 @@ paths:
       description: |
         Send NeoHub command `STORE_PROFILE_TIMER_0` over the authenticated WSS envelope. The logical HTTP mapping exists only for documentation.
         
-        **Inner command JSON:** `{"STORE_PROFILE_TIMER_0": [{}, "Office"]}`
+        **Logical command object:** `{"STORE_PROFILE_TIMER_0": [{}, "Office"]}`
       requestBody:
         required: true
         content:
@@ -3835,7 +3841,7 @@ paths:
       description: |
         Send NeoHub command `STORE_RECIPE` over the authenticated WSS envelope. The logical HTTP mapping exists only for documentation.
         
-        **Inner command JSON:** `{"STORE_RECIPE": ["test4", [], ["kitchen"]]}`
+        **Logical command object:** `{"STORE_RECIPE": ["test4", [], ["kitchen"]]}`
       requestBody:
         required: true
         content:
@@ -3871,7 +3877,7 @@ paths:
       description: |
         Send NeoHub command `SUMMER_OFF` over the authenticated WSS envelope. The logical HTTP mapping exists only for documentation.
         
-        **Inner command JSON:** `{"SUMMER_OFF": ["Bathroom"]}`
+        **Logical command object:** `{"SUMMER_OFF": ["Bathroom"]}`
       requestBody:
         required: true
         content:
@@ -3917,7 +3923,7 @@ paths:
       description: |
         Send NeoHub command `SUMMER_ON` over the authenticated WSS envelope. The logical HTTP mapping exists only for documentation.
         
-        **Inner command JSON:** `{"SUMMER_ON": ["lounge", "bed1"]}`
+        **Logical command object:** `{"SUMMER_ON": ["lounge", "bed1"]}`
       requestBody:
         required: true
         content:
@@ -3964,7 +3970,7 @@ paths:
       description: |
         Send NeoHub command `TIME_ZONE` over the authenticated WSS envelope. The logical HTTP mapping exists only for documentation.
         
-        **Inner command JSON:** `{"TIME_ZONE": 0}`
+        **Logical command object:** `{"TIME_ZONE": 0}`
       requestBody:
         required: true
         content:
@@ -3996,7 +4002,7 @@ paths:
       description: |
         Send NeoHub command `TIMER_HOLD_OFF` over the authenticated WSS envelope. The logical HTTP mapping exists only for documentation.
         
-        **Inner command JSON:** `{"TIMER_HOLD_OFF": [15, "clock"]}`
+        **Logical command object:** `{"TIMER_HOLD_OFF": [15, "clock"]}`
       requestBody:
         required: true
         content:
@@ -4049,7 +4055,7 @@ paths:
       description: |
         Send NeoHub command `TIMER_HOLD_ON` over the authenticated WSS envelope. The logical HTTP mapping exists only for documentation.
         
-        **Inner command JSON:** `{"TIMER_HOLD_ON": [15, "clock"]}`
+        **Logical command object:** `{"TIMER_HOLD_ON": [15, "clock"]}`
       requestBody:
         required: true
         content:
@@ -4102,7 +4108,7 @@ paths:
       description: |
         Send NeoHub command `TIMER_OFF` over the authenticated WSS envelope. The logical HTTP mapping exists only for documentation.
         
-        **Inner command JSON:** `{"TIMER_OFF": "plug"}`
+        **Logical command object:** `{"TIMER_OFF": "plug"}`
       requestBody:
         required: true
         content:
@@ -4147,7 +4153,7 @@ paths:
       description: |
         Send NeoHub command `TIMER_ON` over the authenticated WSS envelope. The logical HTTP mapping exists only for documentation.
         
-        **Inner command JSON:** `{"TIMER_ON": "plug"}`
+        **Logical command object:** `{"TIMER_ON": "plug"}`
       requestBody:
         required: true
         content:
@@ -4192,7 +4198,7 @@ paths:
       description: |
         Send NeoHub command `UNLOCK` over the authenticated WSS envelope. The logical HTTP mapping exists only for documentation.
         
-        **Inner command JSON:** `{"UNLOCK": ["Bathroom", "kitchen"]}`
+        **Logical command object:** `{"UNLOCK": ["Bathroom", "kitchen"]}`
       requestBody:
         required: true
         content:
@@ -4239,7 +4245,7 @@ paths:
       description: |
         Send NeoHub command `USER_LIMIT` over the authenticated WSS envelope. The logical HTTP mapping exists only for documentation.
         
-        **Inner command JSON:** `{"USER_LIMIT": [5, ["bed1", "lounge"]]}`
+        **Logical command object:** `{"USER_LIMIT": [5, ["bed1", "lounge"]]}`
       requestBody:
         required: true
         content:
@@ -4292,7 +4298,7 @@ paths:
       description: |
         Send NeoHub command `VIEW_ROC` over the authenticated WSS envelope. The logical HTTP mapping exists only for documentation.
         
-        **Inner command JSON:** `{"VIEW_ROC": ["Bathroom1"]}`
+        **Logical command object:** `{"VIEW_ROC": ["Bathroom1"]}`
       requestBody:
         required: true
         content:
@@ -4338,7 +4344,7 @@ paths:
       description: |
         Send NeoHub command `ZONE_TITLE` over the authenticated WSS envelope. The logical HTTP mapping exists only for documentation.
         
-        **Inner command JSON:** `{"ZONE_TITLE": ["HCtest", "HCtest2"]}`
+        **Logical command object:** `{"ZONE_TITLE": ["HCtest", "HCtest2"]}`
       requestBody:
         required: true
         content:
@@ -4385,10 +4391,10 @@ components:
           const: hm_get_command_queue
         message:
           type: string
-          description: "JSON string: {token, COMMANDS:[{COMMAND, COMMANDID}]}"
+          description: "JSON string containing {token, COMMANDS:[{COMMAND, COMMANDID}]}. Outer/nested framing is RFC 8259 JSON; each COMMAND value is Heatmiser single-quoted form (e.g. {'GET_LIVE_DATA': 0}), not double-quoted JSON."
       example:
         message_type: hm_get_command_queue
-        message: "{\"token\":\"YOUR_TOKEN\",\"COMMANDS\":[{\"COMMAND\":\"{\\\"GET_LIVE_DATA\\\":0}\",\"COMMANDID\":1}]}"
+        message: "{\"token\":\"YOUR_TOKEN\",\"COMMANDS\":[{\"COMMAND\":\"{'GET_LIVE_DATA': 0}\",\"COMMANDID\":1}]}"
     WsResponse:
       type: object
       properties:

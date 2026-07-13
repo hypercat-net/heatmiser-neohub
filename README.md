@@ -87,7 +87,7 @@ You can also pass flags or export variables yourself.
 | Variable        | Flag       | Description                          | Default |
 | ---------------- | ---------- | ------------------------------------- | ------- |
 | `NEOHUB_HOST`     | `--host`   | Hostname or IP of the hub. If unset, auto-discovers when exactly one hub is on the LAN. | *(auto)* |
-| `NEOHUB_TOKEN`    | `--token`  | API token configured on the hub       | *(none)* |
+| `NEOHUB_TOKEN`    | `--token`  | API token configured on the hub       | *(required for hub commands)* |
 | `NEOHUB_PORT`     | `--port`   | WSS port. If unset, defaults to 4243. | `4243`  |
 
 ```bash
@@ -160,7 +160,7 @@ for hub in discover_hubs():
 
 ```bash
 pip install -e ".[dev]"
-pytest
+pytest   # includes coverage; fail_under is configured in pyproject.toml
 ```
 
 See [CONTRIBUTING.md](CONTRIBUTING.md). This project is released under the

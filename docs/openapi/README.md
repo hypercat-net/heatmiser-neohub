@@ -9,6 +9,11 @@ Each NeoHub command is modelled as a logical `POST /commands/{NAME}` so request
 and response schemas can be documented. Treat those paths as a catalogue of
 command envelopes, not as REST endpoints you call over HTTP.
 
+The outer WSS frame is [RFC 8259](https://www.rfc-editor.org/rfc/rfc8259) JSON.
+The nested `COMMAND` string value is Heatmiser single-quoted pseudo-JSON
+(e.g. `{'GET_LIVE_DATA': 0}`), not double-quoted JSON — see the API reference
+section on COMMAND quoting.
+
 ## Related links
 
 - [neoHub smart control (product)](https://www.heatmiser.com/neohub-smart-control/)

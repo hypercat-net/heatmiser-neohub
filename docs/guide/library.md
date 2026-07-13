@@ -48,6 +48,12 @@ hub is on the LAN (same rules as the CLI).
 
 - **`LiveData`** — hub timestamps, away/holiday flags, and `devices: list[Device]`
 - **`Device`** — zone name, temps, heat/cool/standby/offline flags, profile ids, etc.
+  - **`available_modes`** — lowercased `AVAILABLE_MODES` from the hub (`["heat"]`,
+    `["heat", "cool"]`, …), or `None` when the field is absent
+  - **`supports_mode(mode)`** — `True` if that mode is advertised; when
+    `available_modes` is `None`, returns `True` (unknown → treat as supported)
+  - Also maps humidity, preheat, modulation, hold/level, lock, floor limit, and
+    HC/fan string fields from live data
 - **`SystemInfo`** — hub version, `HUB_TYPE`, format, timezone, NTP/DST fields
 
 Raw hub payloads remain available on each model as `.raw`.
@@ -74,3 +80,17 @@ host, discovered = resolve_hub_host()  # raises DiscoveryError if 0 or 2+ hubs
 Commands are wrapped in the authenticated WSS envelope described in the
 [NeoHub API guide](api/neohub-api.html). For an interactive command catalogue,
 see the secondary [OpenAPI / Swagger](swagger/) page.
+
+### `COMMAND` field encoding
+
+The outer frame and nested `message` string are standard
+[RFC 8259](https://www.rfc-editor.org/rfc/rfc8259) JSON (double-quoted strings).
+The hub's `COMMAND` value is **not**: Heatmiser requires a single-quoted
+pseudo-JSON object such as `{'GET_LIVE_DATA': 0}` (see the
+[API reference](api/neohub-api.html#command-quoting-vs-standard-json)).
+
+RFC 8259 §7 defines JSON strings with U+0022 quotation marks; a standard
+encoding like `{"GET_LIVE_DATA":0}` is valid JSON but the NeoHub rejects it
+inside `COMMAND` with `Invalid Json`. This library uses Python `str(dict)` so
+callers can pass normal dicts to `command()` / `get_live_data()` and still get
+the Heatmiser wire form.

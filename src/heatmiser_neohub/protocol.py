@@ -12,6 +12,11 @@ def encode_command(command: dict[str, Any] | str) -> str:
     The hub expects Heatmiser's single-quoted pseudo-JSON (as in the official
     docs: ``{'FIRMWARE':0}``), not standard JSON. Matching ``neohubapi``, we use
     ``str(dict)`` for that format.
+
+    RFC 8259 §7 requires JSON strings to use U+0022 double quotes; a value such
+    as ``{"FIRMWARE":0}`` is valid JSON but the NeoHub rejects it inside
+    ``COMMAND`` with ``Invalid Json``. See the API reference section on COMMAND
+    quoting.
     """
     if isinstance(command, str):
         return command

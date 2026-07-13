@@ -105,6 +105,18 @@ def test_device_from_dict_maps_fields() -> None:
             "LOW_BATTERY": 0,
             "CURRENT_FLOOR_TEMPERATURE": "127",
             "ACTIVE_PROFILE": "2",
+            "AVAILABLE_MODES": ["heat", "Cool"],
+            "RELATIVE_HUMIDITY": 45,
+            "PREHEAT_ACTIVE": True,
+            "MODULATION_LEVEL": 3,
+            "HOLD_TEMP": 18,
+            "ACTIVE_LEVEL": 1,
+            "FLOOR_LIMIT": True,
+            "HOLIDAY": False,
+            "LOCK": True,
+            "HC_MODE": "VENT",
+            "FAN_SPEED": "Custom",
+            "FAN_CONTROL": "Automatic",
         }
     )
 
@@ -118,6 +130,20 @@ def test_device_from_dict_maps_fields() -> None:
     # 127 is the hub's sentinel for "no floor sensor"
     assert device.floor_temp is None
     assert device.active_profile == 2
+    assert device.available_modes == ["heat", "cool"]
+    assert device.supports_mode("heat") is True
+    assert device.supports_mode("COOL") is True
+    assert device.supports_mode("vent") is False
+    assert device.relative_humidity == 45.0
+    assert device.preheat_active is True
+    assert device.modulation_level == 3.0
+    assert device.hold_temp == 18.0
+    assert device.active_level == 1
+    assert device.floor_limit is True
+    assert device.lock is True
+    assert device.hc_mode == "VENT"
+    assert device.fan_speed == "Custom"
+    assert device.fan_control == "Automatic"
 
 
 def test_device_from_dict_defaults_when_empty() -> None:
@@ -126,6 +152,16 @@ def test_device_from_dict_defaults_when_empty() -> None:
     assert device.device_id is None
     assert device.actual_temp is None
     assert device.heat_on is False
+    assert device.available_modes is None
+    assert device.supports_mode("heat") is True
+    assert device.supports_mode("cool") is True
+
+
+def test_device_available_modes_empty_list() -> None:
+    device = Device.from_dict({"AVAILABLE_MODES": []})
+    assert device.available_modes == []
+    assert device.supports_mode("heat") is False
+    assert device.supports_mode("cool") is False
 
 
 def test_live_data_from_dict_parses_devices() -> None:

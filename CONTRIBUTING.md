@@ -17,6 +17,9 @@ cp .env.example .env   # then set NEOHUB_TOKEN (and optionally NEOHUB_HOST)
 pytest
 ```
 
+`pytest` runs with coverage enabled (`pytest-cov`). The suite must stay at or
+above the `fail_under` threshold in `pyproject.toml` (currently 90%).
+
 If you change the OpenAPI command catalogue in `scripts/generate_openapi.py`,
 regenerate and commit the YAML locally (CI does not run the generator):
 
