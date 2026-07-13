@@ -42,3 +42,4 @@ htmlcov/
 
 # Generated docs site (local / CI artifact)
 site/
+heatmiser-exporter.code-workspace
