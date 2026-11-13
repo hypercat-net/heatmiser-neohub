@@ -4,7 +4,7 @@ Import from `heatmiser_neohub`. The client speaks the modern NeoHub **WSS** API 
 port **4243** (TLS certificate verification disabled by default — the hub uses a
 locally generated cert).
 
-## Stability (1.0)
+## Stability (2.0)
 
 Public symbols are those exported from `heatmiser_neohub` (see `__all__`): the
 client, models, discovery helpers, and errors. The library is a thin protocol
@@ -67,13 +67,17 @@ Raw hub payloads remain available on each model as `.raw`.
 
 ### Discovery helpers
 
+Discovery binds its UDP socket to loopback by default. Pass the local IPv4
+address of the interface connected to the hub's network when needed:
+
 ```python
 from heatmiser_neohub.discover import discover_hubs, resolve_hub_host
 
-for hub in discover_hubs(timeout=2.0):
+for hub in discover_hubs(timeout=2.0, bind_address="192.168.0.20"):
     print(hub.ip, hub.device_id)
 
-host, discovered = resolve_hub_host()  # raises DiscoveryError if 0 or 2+ hubs
+host, discovered = resolve_hub_host(bind_address="192.168.0.20")
+# raises DiscoveryError if 0 or 2+ hubs
 ```
 
 ## Errors

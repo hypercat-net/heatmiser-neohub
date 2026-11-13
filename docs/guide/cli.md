@@ -32,6 +32,7 @@ to `.env` in your working directory, or export variables / pass flags.
 | `NEOHUB_HOST` | `--host` | Hub hostname or IP. If unset, auto-discovers when exactly one hub is on the LAN. | *(auto)* |
 | `NEOHUB_TOKEN` | `--token` | API token from Neo App → Settings → Api Access → Tokens | *(required for commands)* |
 | `NEOHUB_PORT` | `--port` | WSS port | `4243` |
+| `NEOHUB_BIND_ADDRESS` | `--bind-address` | Local IPv4 address used for UDP discovery. Set to a LAN interface address to discover hubs on that network. | `127.0.0.1` |
 
 The CLI loads `.env` automatically via `python-dotenv` (real environment variables win).
 
@@ -71,6 +72,19 @@ Examples with explicit connection settings:
 neohub live-data --host 192.168.0.19 --token "$NEOHUB_TOKEN"
 neohub cmd '{"GET_ZONES":0}' --host 192.168.0.19 --token "$NEOHUB_TOKEN"
 ```
+
+Discovery binds to loopback by default. To discover hubs through a specific
+local network interface, pass its IPv4 address; this option is available on
+`discover` and commands that auto-discover a hub:
+
+```bash
+neohub discover --bind-address 192.168.0.20
+neohub live-data --bind-address 192.168.0.20
+# Or set NEOHUB_BIND_ADDRESS=192.168.0.20 in the environment or .env file.
+```
+
+The bind address is only used when discovery runs; it has no effect when a hub
+is selected explicitly with `--host` / `NEOHUB_HOST`.
 
 ### Auto-discovery
 

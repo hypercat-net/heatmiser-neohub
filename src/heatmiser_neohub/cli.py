@@ -5,6 +5,7 @@ Connection settings can be supplied via flags or environment variables:
     NEOHUB_HOST   hostname or IP (optional — auto-discovers if exactly one hub)
     NEOHUB_TOKEN  API token configured on the hub
     NEOHUB_PORT   WSS port (default 4243)
+    NEOHUB_BIND_ADDRESS  local IPv4 address used for UDP discovery
 """
 
 from __future__ import annotations
@@ -43,6 +44,12 @@ PortOption = typer.Option(
     "--port",
     envvar="NEOHUB_PORT",
     help="NeoHub WSS port. Defaults to 4243 when omitted.",
+)
+BindAddressOption = typer.Option(
+    "127.0.0.1",
+    "--bind-address",
+    envvar="NEOHUB_BIND_ADDRESS",
+    help="Local IPv4 address for UDP discovery (default: 127.0.0.1).",
 )
 
 
@@ -96,10 +103,13 @@ def main_options(
 
 
 def _make_client(
-    host: Optional[str], token: Optional[str], port: Optional[int]
+    host: Optional[str],
+    token: Optional[str],
+    port: Optional[int],
+    bind_address: str,
 ) -> NeoHubClient:
     try:
-        resolved, discovered = resolve_hub_host(host)
+        resolved, discovered = resolve_hub_host(host, bind_address=bind_address)
     except DiscoveryError as exc:
         typer.secho(str(exc), fg=typer.colors.RED, err=True)
         raise typer.Exit(code=1) from exc
@@ -126,9 +136,12 @@ def discover(
     broadcast: str = typer.Option(
         "255.255.255.255", "--broadcast", help="Broadcast address to send hubseek to."
     ),
+    bind_address: str = BindAddressOption,
 ) -> None:
     """Discover NeoHubs on the local network via UDP broadcast (hubseek)."""
-    hubs = discover_hubs(timeout=timeout, broadcast_address=broadcast)
+    hubs = discover_hubs(
+        timeout=timeout, broadcast_address=broadcast, bind_address=bind_address
+    )
     if not hubs:
         typer.echo("No NeoHubs found.")
         raise typer.Exit(code=1)
@@ -141,9 +154,10 @@ def live_data(
     host: Optional[str] = HostOption,
     token: Optional[str] = TokenOption,
     port: Optional[int] = PortOption,
+    bind_address: str = BindAddressOption,
 ) -> None:
     """Fetch and print GET_LIVE_DATA from the hub as JSON."""
-    client = _make_client(host, token, port)
+    client = _make_client(host, token, port, bind_address)
 
     async def _fetch() -> str:
         async with client:
@@ -158,9 +172,10 @@ def system(
     host: Optional[str] = HostOption,
     token: Optional[str] = TokenOption,
     port: Optional[int] = PortOption,
+    bind_address: str = BindAddressOption,
 ) -> None:
     """Fetch and print GET_SYSTEM from the hub as JSON."""
-    client = _make_client(host, token, port)
+    client = _make_client(host, token, port, bind_address)
 
     async def _fetch() -> str:
         async with client:
@@ -178,6 +193,7 @@ def cmd(
     host: Optional[str] = HostOption,
     token: Optional[str] = TokenOption,
     port: Optional[int] = PortOption,
+    bind_address: str = BindAddressOption,
 ) -> None:
     """Send an arbitrary JSON command to the hub and print the raw response."""
     try:
@@ -186,7 +202,7 @@ def cmd(
         typer.secho(f"Invalid JSON command: {exc}", fg=typer.colors.RED, err=True)
         raise typer.Exit(code=1) from exc
 
-    client = _make_client(host, token, port)
+    client = _make_client(host, token, port, bind_address)
 
     async def _send() -> str:
         async with client:

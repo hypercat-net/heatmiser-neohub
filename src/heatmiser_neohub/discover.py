@@ -27,6 +27,7 @@ def discover_hubs(
     timeout: float = 2.0,
     broadcast_address: str = "255.255.255.255",
     port: int = HUBSEEK_PORT,
+    bind_address: str = "127.0.0.1",
 ) -> list[DiscoveredHub]:
     """Broadcast ``hubseek`` and collect NeoHub replies.
 
@@ -38,7 +39,7 @@ def discover_hubs(
 
     hubs: dict[str, DiscoveredHub] = {}
     try:
-        sock.bind(("", 0))
+        sock.bind((bind_address, 0))
         sock.sendto(HUBSEEK_PAYLOAD, (broadcast_address, port))
 
         while True:
@@ -72,6 +73,7 @@ def resolve_hub_host(
     *,
     timeout: float = 2.0,
     broadcast_address: str = "255.255.255.255",
+    bind_address: str = "127.0.0.1",
 ) -> tuple[str, bool]:
     """Resolve a NeoHub host, discovering on the LAN if needed.
 
@@ -85,7 +87,11 @@ def resolve_hub_host(
     if explicit:
         return explicit, False
 
-    hubs = discover_hubs(timeout=timeout, broadcast_address=broadcast_address)
+    hubs = discover_hubs(
+        timeout=timeout,
+        broadcast_address=broadcast_address,
+        bind_address=bind_address,
+    )
     if not hubs:
         raise DiscoveryError(
             "NeoHub host is not set and discovery found no hubs "
