@@ -67,13 +67,17 @@ Raw hub payloads remain available on each model as `.raw`.
 
 ### Discovery helpers
 
+Discovery binds its UDP socket to loopback by default. Pass the local IPv4
+address of the interface connected to the hub's network when needed:
+
 ```python
 from heatmiser_neohub.discover import discover_hubs, resolve_hub_host
 
-for hub in discover_hubs(timeout=2.0):
+for hub in discover_hubs(timeout=2.0, bind_address="192.168.0.20"):
     print(hub.ip, hub.device_id)
 
-host, discovered = resolve_hub_host()  # raises DiscoveryError if 0 or 2+ hubs
+host, discovered = resolve_hub_host(bind_address="192.168.0.20")
+# raises DiscoveryError if 0 or 2+ hubs
 ```
 
 ## Errors

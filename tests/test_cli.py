@@ -61,14 +61,38 @@ def test_verbose_enables_logging(monkeypatch: pytest.MonkeyPatch) -> None:
 
 
 def test_discover_lists_hubs(monkeypatch: pytest.MonkeyPatch) -> None:
+    calls: list[dict[str, Any]] = []
+
+    def fake_discover(**kwargs: Any) -> list[DiscoveredHub]:
+        calls.append(kwargs)
+        return [DiscoveredHub(ip="10.0.0.1", device_id="AA")]
+
     monkeypatch.setattr(
         "heatmiser_neohub.cli.discover_hubs",
-        lambda **_: [DiscoveredHub(ip="10.0.0.1", device_id="AA")],
+        fake_discover,
     )
-    result = runner.invoke(app, ["discover"])
+    result = runner.invoke(
+        app, ["discover", "--bind-address", "192.168.1.20"]
+    )
     assert result.exit_code == 0
     assert "10.0.0.1" in result.stdout
     assert "AA" in result.stdout
+    assert calls[0]["bind_address"] == "192.168.1.20"
+
+
+def test_discover_bind_address_from_env(monkeypatch: pytest.MonkeyPatch) -> None:
+    calls: list[dict[str, Any]] = []
+
+    def fake_discover(**kwargs: Any) -> list[DiscoveredHub]:
+        calls.append(kwargs)
+        return [DiscoveredHub(ip="10.0.0.1")]
+
+    monkeypatch.setattr("heatmiser_neohub.cli.discover_hubs", fake_discover)
+    result = runner.invoke(
+        app, ["discover"], env={"NEOHUB_BIND_ADDRESS": "192.168.1.21"}
+    )
+    assert result.exit_code == 0
+    assert calls[0]["bind_address"] == "192.168.1.21"
 
 
 def test_discover_none_exits_1(monkeypatch: pytest.MonkeyPatch) -> None:
@@ -78,6 +102,8 @@ def test_discover_none_exits_1(monkeypatch: pytest.MonkeyPatch) -> None:
 
 
 def test_live_data_command(monkeypatch: pytest.MonkeyPatch) -> None:
+    resolved_bind_addresses: list[str] = []
+
     class FakeClient:
         def __init__(self, **_: object) -> None:
             pass
@@ -91,13 +117,30 @@ def test_live_data_command(monkeypatch: pytest.MonkeyPatch) -> None:
         async def get_live_data(self) -> LiveData:
             return LiveData.from_dict({"HUB_TIME": 42, "devices": []})
 
-    monkeypatch.setattr("heatmiser_neohub.cli.resolve_hub_host", lambda host: ("10.0.0.1", False))
+    def fake_resolve_hub_host(
+        host: str | None, *, bind_address: str
+    ) -> tuple[str, bool]:
+        assert host is None
+        resolved_bind_addresses.append(bind_address)
+        return "10.0.0.1", False
+
+    monkeypatch.setattr(
+        "heatmiser_neohub.cli.resolve_hub_host", fake_resolve_hub_host
+    )
     monkeypatch.setattr("heatmiser_neohub.cli.NeoHubClient", FakeClient)
     result = runner.invoke(
-        app, ["live-data", "--host", "10.0.0.1", "--token", "t"]
+        app,
+        [
+            "live-data",
+            "--token",
+            "t",
+            "--bind-address",
+            "192.168.1.20",
+        ],
     )
     assert result.exit_code == 0
     assert "HUB_TIME" in result.stdout
+    assert resolved_bind_addresses == ["192.168.1.20"]
 
 
 def test_system_and_cmd(monkeypatch: pytest.MonkeyPatch) -> None:
@@ -117,7 +160,10 @@ def test_system_and_cmd(monkeypatch: pytest.MonkeyPatch) -> None:
         async def command(self, payload: dict[str, Any]) -> dict[str, Any]:
             return {"echo": payload}
 
-    monkeypatch.setattr("heatmiser_neohub.cli.resolve_hub_host", lambda host: ("10.0.0.1", False))
+    monkeypatch.setattr(
+        "heatmiser_neohub.cli.resolve_hub_host",
+        lambda host, **_: ("10.0.0.1", False),
+    )
     monkeypatch.setattr("heatmiser_neohub.cli.NeoHubClient", FakeClient)
 
     system = runner.invoke(app, ["system", "--host", "10.0.0.1", "--token", "t"])
@@ -148,7 +194,10 @@ def test_live_data_neohub_error(monkeypatch: pytest.MonkeyPatch) -> None:
         async def get_live_data(self) -> LiveData:
             raise NeoHubError("boom")
 
-    monkeypatch.setattr("heatmiser_neohub.cli.resolve_hub_host", lambda host: ("10.0.0.1", False))
+    monkeypatch.setattr(
+        "heatmiser_neohub.cli.resolve_hub_host",
+        lambda host, **_: ("10.0.0.1", False),
+    )
     monkeypatch.setattr("heatmiser_neohub.cli.NeoHubClient", FakeClient)
     result = runner.invoke(
         app, ["live-data", "--host", "10.0.0.1", "--token", "t"]

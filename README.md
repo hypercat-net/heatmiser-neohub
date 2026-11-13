@@ -97,6 +97,7 @@ You can also pass flags or export variables yourself.
 | `NEOHUB_HOST`     | `--host`   | Hostname or IP of the hub. If unset, auto-discovers when exactly one hub is on the LAN. | *(auto)* |
 | `NEOHUB_TOKEN`    | `--token`  | API token configured on the hub       | *(required for hub commands)* |
 | `NEOHUB_PORT`     | `--port`   | WSS port. If unset, defaults to 4243. | `4243`  |
+| `NEOHUB_BIND_ADDRESS` | `--bind-address` | Local IPv4 address used for UDP discovery; use a LAN interface address when needed. | `127.0.0.1` |
 
 ```bash
 # With .env in the working directory
@@ -132,8 +133,9 @@ neohub --debug cmd '{"FIRMWARE":0}'
 ```
 
 Global options: `--version`/`-V`, `--verbose`/`-v`, `--debug` (also
-`NEOHUB_VERBOSE` / `NEOHUB_DEBUG`). Each command also accepts `--host`,
-`--token`, and `--port`, which override the corresponding environment variables.
+`NEOHUB_VERBOSE` / `NEOHUB_DEBUG`). Commands that connect to a hub accept
+`--host`, `--token`, `--port`, and `--bind-address`, which override the
+corresponding environment variables.
 
 ## Library example
 
@@ -163,6 +165,10 @@ from heatmiser_neohub.discover import discover_hubs
 for hub in discover_hubs():
     print(hub.ip, hub.device_id)
 ```
+
+Discovery binds to loopback by default. To discover through a specific local
+network interface, pass its IPv4 address with `--bind-address` in the CLI or
+`bind_address=` in the Python discovery helpers.
 
 ## Development
 
