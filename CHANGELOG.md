@@ -5,6 +5,18 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Breaking
+
+- Discovery now binds to loopback by default. Pass a local interface address
+  with `bind_address` or the CLI's `--bind-address` / `NEOHUB_BIND_ADDRESS`
+  when LAN discovery is required.
+
+### Added
+
+- CLI support for selecting the discovery bind address.
+
 ## [1.0.0] - 2026-07-13
 
 ### Added

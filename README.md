@@ -6,7 +6,7 @@ Python client library and command-line interface for the IMI Heatmiser NeoHub AP
 (WebSocket/WSS control interface on port 4243, plus UDP `hubseek` discovery on
 port 19790).
 
-### Stability (1.0)
+### Stability (2.0)
 
 The public API is the symbols exported from `heatmiser_neohub` (client, models,
 discovery helpers, errors) and the CLI commands `discover`, `live-data`,
